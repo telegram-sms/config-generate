@@ -1,4 +1,4 @@
-import {Alert, Autocomplete, Button, FormControlLabel, Switch, TextField} from "@mui/material";
+import {Alert, Autocomplete, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
 import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
@@ -6,7 +6,7 @@ function Bark() {
     const [server, setServer] = useState("");
     const [icon, setIcon] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4");
     const [value, setValue] = useState("");
-    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 20, mime: 'image/png'});
+    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
     const barkSounds = [
         "alarm", "anticipate", "bell", "birdsong", "bloom", "calypso", "chime", "choo", "descent", "electronic", "fanfare", "gathering", "glass", "gotosleep", "healthnotification", "horn", "ladder", "mailsent", "minuet", "multiwayinvitation", "newmail", "newsflash", "noir", "paymentsuccess", "shake", "sherwoodforest", "silence", "spell", "suspense", "telegraph", "tiptoes", "typewriters", "update", "uplift", "voicemail"
     ];
@@ -14,7 +14,11 @@ function Bark() {
     const [ringtone, setRingtone] = useState("alarm");
     return (
         <>
-            <div>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2
+            }}>
                 <TextField type="text"
                            value={server} onChange={(event) => {
                     setServer(event.target.value);
@@ -23,6 +27,20 @@ function Bark() {
                 <TextField type="text" value={icon} onChange={(event) => {
                     setIcon(event.target.value);
                 }} label="Icon URL" variant="outlined" required/>
+                <FormControlLabel control={<Switch name="fallback_sms"
+                                                   checked={useRingtone}
+                                                   onChange={()=>{
+                                                       useRingtone ? setUseRingtone(false) : setUseRingtone(true);
+                                                   }}/>}
+                                  label="Using RingTone"/>
+                <Autocomplete
+                    style={{display: useRingtone ? 'block' : 'none'}}
+                    freeSolo
+                    options={barkSounds}
+                    value={ringtone}
+                    onChange={(event, newValue) => {setRingtone(newValue?newValue:"alarm")}}
+                    renderInput={(params) => <TextField {...params} label="Sounds" />}
+                />
                 <Button type="submit" onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
@@ -40,32 +58,15 @@ function Bark() {
                     const Json = JSON.stringify(formData)
                     setValue(Json);
                 }} variant="contained">Generate QR Code</Button>
-            </div>
-            <div>
-                <FormControlLabel control={<Switch name="fallback_sms"
-                                                   checked={useRingtone}
-                                                   onChange={()=>{
-                                                       useRingtone ? setUseRingtone(false) : setUseRingtone(true);
-                                                   }}/>}
-                                  label="Using RingTone"/>
-                <Autocomplete
-                    style={{display: useRingtone ? 'block' : 'none'}}
-                    freeSolo
-                    options={barkSounds}
-                    value={ringtone}
-                    onChange={(event, newValue) => {setRingtone(newValue?newValue:"alarm")}}
-                    sx={{ width: 300 }}
-                    renderInput={(params) => <TextField {...params} label="Sounds" />}
-                />
-            </div>
-            <div style={{display: value ? 'none' : 'block'}}>
+            </Box>
+            <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
                 <Alert variant="filled" severity="info">
                     Your generated QR Code will be displayed here
                 </Alert>
-            </div>
-            <div style={{display: value ? 'block' : 'none'}}>
+            </Box>
+            <Box sx={{display: value ? 'block' : 'none', marginTop: 2}}>
                 <img src={qrCode} alt="QR Code"/>
-            </div>
+            </Box>
         </>
     );
 }

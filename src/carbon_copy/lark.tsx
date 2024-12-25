@@ -1,4 +1,4 @@
-import {Alert, Button, TextField} from "@mui/material";
+import {Alert, Box, Button, TextField} from "@mui/material";
 import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
@@ -31,10 +31,14 @@ function Lark() {
 
     const [server, setServer] = useState("");
     const [value, setValue] = useState('');
-    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 20, mime: 'image/png'});
+    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
     return (
         <>
-            <div>
+            <Box sx={{
+                display: "flex",
+                flexDirection: "column",
+                gap: 2
+            }}>
                 <TextField type="text"
                            value={server} onChange={(event) => {
                     setServer(event.target.value);
@@ -47,15 +51,15 @@ function Lark() {
                     setValue(JSON.stringify(formData));
                     console.log(formData);
                 }} variant="contained">Generate QR Code</Button>
-            </div>
-            <div style={{display: value ? 'none' : 'block'}}>
+            </Box>
+            <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
                 <Alert variant="filled" severity="info">
                     our generated QR Code will be displayed here
                 </Alert>
-            </div>
-            <div style={{display: value ? 'block' : 'none'}}>
+            </Box>
+            <Box sx={{display: value ? 'block' : 'none', marginTop: 2}}>
                 <img src={qrCode} alt="QR Code"/>
-            </div>
+            </Box>
         </>
     );
 }
