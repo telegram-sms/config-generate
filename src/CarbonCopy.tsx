@@ -20,7 +20,15 @@ const CarbonCopy: React.FC = () => {
     };
 
     return (
-        <div>
+        <Box sx={{
+            maxWidth: "700px",
+            margin: "0 auto",
+            backgroundColor: "#fff",
+            borderRadius: "1em",
+            boxSizing: "border-box",
+            padding: "0 1em",
+            boxShadow: "rgba(0, 0, 0, .12) .25em .25em 1em .25em"
+        }}>
             <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Bark" {...a11yProps(0)} />
@@ -37,7 +45,7 @@ const CarbonCopy: React.FC = () => {
             <CustomTabPanel value={value} index={2}>
                 Item Three
             </CustomTabPanel>
-        </div>
+        </Box>
     );
 }
 
