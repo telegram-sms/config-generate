@@ -29,7 +29,16 @@ const CarbonCopy: React.FC = () => {
             padding: "0 1em",
             boxShadow: "rgba(0, 0, 0, .12) .25em .25em 1em .25em"
         }}>
-            <Box sx={{ borderBottom: 1, borderColor: 'divider' }}>
+            <Box sx={{
+                textAlign: "center",
+                padding: "1em 0",
+                lineHeight: "2.2em",
+                boxSizing: "border-box",
+                borderBottom: "2px dashed #ddd"
+            }}>
+                <Box sx={{ margin: "0", fontSize: "1.7em", fontWeight: 700 }}>Telegram SMS Config Generator</Box>
+            </Box>
+            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label="Bark" {...a11yProps(0)} />
                     <Tab label="Lark (Feishu)" {...a11yProps(1)} />
@@ -37,10 +46,10 @@ const CarbonCopy: React.FC = () => {
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
-                <Bark />
+                <Bark/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={1}>
-                <Lark />
+                <Lark/>
             </CustomTabPanel>
             <CustomTabPanel value={value} index={2}>
                 Item Three
