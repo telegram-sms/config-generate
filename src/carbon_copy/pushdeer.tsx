@@ -2,7 +2,7 @@ import {Alert, Box, Button, TextField} from "@mui/material";
 import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
-function Lark() {
+function PushDeer() {
     const formData = {
             method: 1,
             webhook: "",
@@ -11,25 +11,9 @@ function Lark() {
             header: ""
         };
 
-    const body = {
-        msg_type: "post",
-        content: {
-            "post": {
-                "en_us": {
-                    "title": "{{Title}}",
-                    "content": [
-                        [{
-                            "tag": "text",
-                            "text": "{{Message}}"
-                        }
-                        ]
-                    ]
-                }
-            }
-        }
-    };
 
-    const [server, setServer] = useState("");
+    const [server, setServer] = useState("api2.pushdeer.com");
+    const [key, setKey] = useState("");
     const [value, setValue] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
     return (
@@ -42,14 +26,17 @@ function Lark() {
                 <TextField type="text"
                            value={server} onChange={(event) => {
                     setServer(event.target.value);
-                }} label="Webhook URL"
+                }} label="Endpoint"
+                           variant="outlined" required/>
+                <TextField type="text"
+                           value={key} onChange={(event) => {
+                    setKey(event.target.value);
+                }} label="Pushkey"
                            variant="outlined" required/>
                 <Button type="submit" onClick={(event) => {
                     event.preventDefault();
-                    formData.webhook = server;
-                    formData.body = JSON.stringify(body);
+                    formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Content}}&type=markdown`;
                     setValue(JSON.stringify(formData));
-                    console.log(formData);
                 }} variant="contained">Generate QR Code</Button>
             </Box>
             <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
@@ -67,4 +54,4 @@ function Lark() {
     );
 }
 
-export default Lark;
+export default PushDeer;

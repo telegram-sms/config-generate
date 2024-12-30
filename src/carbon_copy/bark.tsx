@@ -29,7 +29,7 @@ function Bark() {
                 }} label="Icon URL" variant="outlined" required/>
                 <FormControlLabel control={<Switch name="fallback_sms"
                                                    checked={useRingtone}
-                                                   onChange={()=>{
+                                                   onChange={() => {
                                                        useRingtone ? setUseRingtone(false) : setUseRingtone(true);
                                                    }}/>}
                                   label="Using RingTone"/>
@@ -38,8 +38,10 @@ function Bark() {
                     freeSolo
                     options={barkSounds}
                     value={ringtone}
-                    onChange={(event, newValue) => {setRingtone(newValue?newValue:"alarm")}}
-                    renderInput={(params) => <TextField {...params} label="Sounds" />}
+                    onChange={(event, newValue) => {
+                        setRingtone(newValue ? newValue : "alarm")
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Sounds"/>}
                 />
                 <Button type="submit" onClick={(event) => {
                     event.preventDefault();
@@ -64,7 +66,10 @@ function Bark() {
                     Your generated QR Code will be displayed here
                 </Alert>
             </Box>
-            <Box sx={{display: value ? 'block' : 'none', marginTop: 2}}>
+            <Box sx={{
+                display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
+                justifyContent: "center"
+            }}>
                 <img src={qrCode} alt="QR Code"/>
             </Box>
         </>
