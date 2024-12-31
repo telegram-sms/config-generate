@@ -35,7 +35,7 @@ function PushDeer() {
                            variant="outlined" required/>
                 <Button type="submit" onClick={(event) => {
                     event.preventDefault();
-                    formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Content}}&type=markdown`;
+                    formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Message}}&type=markdown`;
                     setValue(JSON.stringify(formData));
                     console.log(formData);
                 }} variant="contained">Generate QR Code</Button>
