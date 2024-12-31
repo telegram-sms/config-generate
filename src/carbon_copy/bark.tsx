@@ -21,11 +21,11 @@ function Bark() {
             }}>
                 <TextField type="text"
                            value={server} onChange={(event) => {
-                    setServer(event.target.value);
+                    setServer(event.target.value.trim());
                 }} label="Webhook URL"
                            variant="outlined" required/>
                 <TextField type="text" value={icon} onChange={(event) => {
-                    setIcon(event.target.value);
+                    setIcon(event.target.value.trim());
                 }} label="Icon URL" variant="outlined" required/>
                 <FormControlLabel control={<Switch name="fallback_sms"
                                                    checked={useRingtone}

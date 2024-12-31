@@ -25,18 +25,19 @@ function PushDeer() {
             }}>
                 <TextField type="text"
                            value={server} onChange={(event) => {
-                    setServer(event.target.value);
+                    setServer(event.target.value.trim());
                 }} label="Endpoint"
                            variant="outlined" required/>
                 <TextField type="text"
                            value={key} onChange={(event) => {
-                    setKey(event.target.value);
+                    setKey(event.target.value.trim());
                 }} label="Pushkey"
                            variant="outlined" required/>
                 <Button type="submit" onClick={(event) => {
                     event.preventDefault();
                     formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Content}}&type=markdown`;
                     setValue(JSON.stringify(formData));
+                    console.log(formData);
                 }} variant="contained">Generate QR Code</Button>
             </Box>
             <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>

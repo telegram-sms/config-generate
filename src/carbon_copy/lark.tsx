@@ -41,7 +41,7 @@ function Lark() {
             }}>
                 <TextField type="text"
                            value={server} onChange={(event) => {
-                    setServer(event.target.value);
+                    setServer(event.target.value.trim());
                 }} label="Webhook URL"
                            variant="outlined" required/>
                 <Button type="submit" onClick={(event) => {
