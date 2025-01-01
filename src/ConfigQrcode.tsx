@@ -283,9 +283,9 @@ const ConfigQrcode: React.FC = () => {
                             <Button type="button" onClick={() => {
                                 setInputOpen(true)
                             }} disabled={disableGenerateQRCode}
-                                    variant="outlined">Send configuration
+                                    variant="contained">Send configuration
                                 ID</Button>
-                            <Button type="submit" variant="contained" disabled={disableGenerateQRCode}>Generate QR
+                            <Button type="submit" variant="contained" color="secondary" disabled={disableGenerateQRCode}>Generate QR
                                 Code</Button>
                         </Box>
                     </form>

@@ -14,7 +14,6 @@ import (
 
 const (
 	ivLength       = 12
-	tagLength      = 16
 	iterationCount = 65536
 	keyLength      = 32
 )
