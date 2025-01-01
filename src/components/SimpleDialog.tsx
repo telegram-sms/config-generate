@@ -27,7 +27,11 @@ function SimpleDialog(props: SimpleDialogProps) {
     };
 
     return (
-        <Dialog onClose={handleClose} open={open}>
+        <Dialog PaperProps={{
+            style: {
+                width: '500px',
+            }
+        }} onClose={handleClose} open={open}>
             <DialogTitle>{title}</DialogTitle>
             <List sx={{pt: 0}}>
                 {lists.map((value, index) => (

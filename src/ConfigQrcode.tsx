@@ -3,6 +3,9 @@ import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField} fro
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
+import AES from "./utils/aes";
+import InputDialog from "./components/InputDialog";
+import AlertDialog from "./components/AlertDialog";
 
 interface FormData {
     bot_token: string;
@@ -28,10 +31,14 @@ const ConfigQrcode: React.FC = () => {
         chat_command: false,
         fallback_sms: false,
         privacy_mode: false,
-        verification_code: false,
+        verification_code: false
     });
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState('');
+
     const [progressOpen, setProgressOpen] = useState(false);
     const [selectOpen, setSelectOpen] = useState(false);
+    const [inputOpen, setInputOpen] = useState(false);
     const [lists, setLists] = useState<string[]>([]);
     const [chatIDList, setChatIDList] = useState<string[]>([]);
     const [chatThreadIDList, setChatThreadIDList] = useState<string[]>([]);
@@ -43,13 +50,11 @@ const ConfigQrcode: React.FC = () => {
     const [error, setError] = useState('');
     const [disableGetChatId, setDisableGetChatId] = useState(false);
     const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(false);
+    const [progressMessage, setProgressMessage] = useState("Please send some messages to the bot...");
 
     useEffect(() => {
         setDisableGetChatId(String(formData.bot_token).trim() === '');
         setDisableGenerateQRCode(String(formData.bot_token).trim() === '' || String(formData.chat_id).trim() === '');
-
-        console.log(disableGenerateQRCode);
-
     }, [formData]);
 
 
@@ -59,7 +64,6 @@ const ConfigQrcode: React.FC = () => {
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
         });
-        console.log(formData);
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -67,6 +71,7 @@ const ConfigQrcode: React.FC = () => {
         setValue(JSON.stringify(formData));
     };
     const handleGetRecentChatID = () => {
+        setProgressMessage("Please send some messages to the bot...");
         setProgressOpen(true);
         fetch('https://api.telegram.org/bot' + formData.bot_token + '/getUpdates?timeout=120')
             .then(response => response.json())
@@ -87,7 +92,6 @@ const ConfigQrcode: React.FC = () => {
                 setSelectOpen(true);
             })
             .catch(error => {
-                console.error('Error:', error);
                 setError(error.message);
                 setErrorAlert(true);
             })
@@ -128,12 +132,53 @@ const ConfigQrcode: React.FC = () => {
         };
     }
 
+    async function handleSendConfig(password: string) {
+
+        const configJson = JSON.stringify(formData)
+        const key = await AES.getKeyFromString(password);
+        const result = await AES.encrypt(configJson, key);
+        const data = {
+            encrypt: result
+        }
+        setProgressMessage("Transmitting, please wait...");
+        setProgressOpen(true);
+        try {
+            const response = await fetch('https://api.telegram-sms.com/config', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            const result = await response.json();
+            console.log(result);
+            return result;
+        } catch (error) {
+            console.error('Error:', error);
+        } finally {
+            setProgressOpen(false);
+        }
+    }
+
+
     return (
         <>
+            <InputDialog open={inputOpen} title="Please enter password" onClose={async (value) => {
+                setInputOpen(false);
+                // noinspection JSIgnoredPromiseFromCall
+                if (value !== "") {
+                    const result = await handleSendConfig(value);
+                    if (result.key) {
+                        setAlertMessage(`Configuration sent successfully. ID: ${result.key}`);
+                        setAlertOpen(true);
+                    }
+                }
+            }} label="Password" type="password"></InputDialog>
             {errorAlert && (<Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
                 {error}
             </Alert>)}
+            <AlertDialog open={alertOpen} title="Send configuration" message={alertMessage} onClose={()=>setAlertOpen(false)}/>
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
@@ -144,7 +189,7 @@ const ConfigQrcode: React.FC = () => {
                               chatIDRef.current?.focus();
                               setSelectOpen(false);
                           }} lists={lists}/>
-            <ProgressDialog open={progressOpen} title="Loading" message="Please send some messages to the bot..."/>
+            <ProgressDialog open={progressOpen} title="Loading" message={progressMessage}/>
             <Box sx={{
                 maxWidth: "700px",
                 margin: "0 auto",
@@ -226,6 +271,11 @@ const ConfigQrcode: React.FC = () => {
                                               label="Verification code automatic extraction (Alpha)"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
+                                ID</Button>
+                            <Button type="button" onClick={() => {
+                                setInputOpen(true)
+                            }} disabled={disableGenerateQRCode}
+                                    variant="outlined">Send configuration
                                 ID</Button>
                             <Button type="submit" variant="contained" disabled={disableGenerateQRCode}>Generate QR
                                 Code</Button>
