@@ -3,9 +3,9 @@ import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField} fro
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
-import AES from "./utils/aes";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
+import './wasm_exec.js';
 
 interface FormData {
     bot_token: string;
@@ -135,10 +135,17 @@ const ConfigQrcode: React.FC = () => {
     async function handleSendConfig(password: string) {
 
         const configJson = JSON.stringify(formData)
-        const key = await AES.getKeyFromString(password);
-        const result = await AES.encrypt(configJson, key);
+        const response = await fetch('crypto.wasm');
+        const buffer = await response.arrayBuffer();
+        const module = await WebAssembly.compile(buffer);
+        const go = new window.Go();
+        const instance = new WebAssembly.Instance(module, go.importObject);
+        go.run(instance);
+        // @ts-ignore
+        const result = window.encrypt(configJson, password);
+        console.log(result);
         const data = {
-            encrypt: result
+            encrypt: result.result
         }
         setProgressMessage("Transmitting, please wait...");
         setProgressOpen(true);
@@ -169,7 +176,7 @@ const ConfigQrcode: React.FC = () => {
                 if (value !== "") {
                     const result = await handleSendConfig(value);
                     if (result.key) {
-                        setAlertMessage(`Configuration sent successfully. ID: ${result.key}`);
+                        setAlertMessage(`Configuration sent successfully. \nID: ${result.key}`);
                         setAlertOpen(true);
                     }
                 }
@@ -178,7 +185,8 @@ const ConfigQrcode: React.FC = () => {
                 <AlertTitle>Error</AlertTitle>
                 {error}
             </Alert>)}
-            <AlertDialog open={alertOpen} title="Send configuration" message={alertMessage} onClose={()=>setAlertOpen(false)}/>
+            <AlertDialog open={alertOpen} title="Send configuration" message={alertMessage}
+                         onClose={() => setAlertOpen(false)}/>
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
@@ -304,8 +312,9 @@ const ConfigQrcode: React.FC = () => {
                         You can use Telegram SMS to scan this QR code, which will allow you to quickly apply your
                         configuration.</p>
                     <h2>Important Notice</h2>
-                    <p>This tool is purely frontend-based, which won't upload any data into our server. You can get
-                        source code <a href="https://github.com/telegram-sms/qrcode.telegram-sms.com"
+                    <p>Since bot keys are very sensitive data, this tool will not upload any clear text configuration
+                        files to any server. You can get
+                        source code <a href="https://github.com/telegram-sms/config-generate"
                                        target="_blank"
                                        rel="noopener noreferrer">here</a>.</p>
                     <h2>Acknowledgements</h2>
@@ -315,8 +324,7 @@ const ConfigQrcode: React.FC = () => {
                 </Box>
             </Box>
         </>
-    )
-        ;
+    );
 }
 
 export default ConfigQrcode;
