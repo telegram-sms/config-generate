@@ -5,12 +5,13 @@ import { CssBaseline } from '@mui/material';
 import theme from './theme';
 // import App from './App';
 import CarbonCopy from "./CarbonCopy";
+import ConfigQrcode from "./ConfigQrcode";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <CarbonCopy/>
+      <ConfigQrcode/>
     </ThemeProvider>
   </React.StrictMode>,
 );
