@@ -226,7 +226,7 @@ const ConfigQrcode: React.FC = () => {
                                        label="Chat ID"
                                        variant="outlined" required/>
                             <TextField
-                                style={{display: groupMode ? 'block' : 'none'}}
+                                style={{display: groupMode ? 'flex' : 'none'}}
                                 name="topic_id"
                                 onChange={handleChange}
                                 value={formData.topic_id} label="Topic ID" variant="outlined"/>
