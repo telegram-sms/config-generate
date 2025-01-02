@@ -5,7 +5,7 @@ import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
-import {encrypt} from "./wasm";
+import {encrypt} from "./wasm/wasm_rs";
 
 interface FormData {
     bot_token: string;
