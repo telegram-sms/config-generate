@@ -13,14 +13,22 @@ interface InputDialogProps {
     label: string;
     type: string;
     onClose: (value: string) => void;
+    onVerify?: (value: string) => { state: boolean, msg: string };
 }
 
-const InputDialog: React.FC<InputDialogProps> = ({open, title, label, type, onClose}) => {
+const InputDialog: React.FC<InputDialogProps> = ({open, title, label, type, onClose, onVerify}) => {
     const [inputValue, setInputValue] = useState('');
+    const [error, setError] = useState('');
 
     const handleClose = () => {
+        const verify = onVerify ? onVerify(inputValue) : {state: true, msg: ''};
+        if (!verify.state) {
+            setError(verify.msg);
+            return
+        }
         onClose(inputValue);
         setInputValue('');
+        setError('');
     };
 
     return (
@@ -39,12 +47,18 @@ const InputDialog: React.FC<InputDialogProps> = ({open, title, label, type, onCl
                     fullWidth
                     variant="outlined"
                     value={inputValue}
-                    onChange={(e) => setInputValue(e.target.value)}
+                    onChange={(e) => {
+                        setInputValue(e.target.value);
+                        setError('');
+                    }}
+                    error={!!error}
+                    helperText={error}
                 />
             </DialogContent>
             <DialogActions>
                 <Button onClick={() => {
                     setInputValue('');
+                    setError('');
                     onClose('');
                 }} color="primary">
                     Cancel

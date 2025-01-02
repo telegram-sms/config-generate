@@ -1,4 +1,4 @@
-import React, {useState, useRef, useEffect} from 'react';
+import React, {useEffect, useRef, useState} from 'react';
 import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
@@ -64,6 +64,13 @@ const ConfigQrcode: React.FC = () => {
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
         });
+        if (name === 'battery_monitoring_switch' && !checked) {
+            setFormData({
+                ...formData,
+                charger_status: false,
+                battery_monitoring_switch: checked,
+            });
+        }
     };
 
     const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
@@ -133,7 +140,6 @@ const ConfigQrcode: React.FC = () => {
     }
 
     async function handleSendConfig(password: string) {
-
         const configJson = JSON.stringify(formData)
         const response = await fetch('crypto.wasm');
         const buffer = await response.arrayBuffer();
@@ -143,7 +149,6 @@ const ConfigQrcode: React.FC = () => {
         go.run(instance);
         // @ts-ignore
         const result = window.encrypt(configJson, password);
-        console.log(result);
         const data = {
             encrypt: result.result
         }
@@ -157,9 +162,7 @@ const ConfigQrcode: React.FC = () => {
                 },
                 body: JSON.stringify(data)
             });
-            const result = await response.json();
-            console.log(result);
-            return result;
+            return await response.json();
         } catch (error) {
             console.error('Error:', error);
         } finally {
@@ -180,7 +183,17 @@ const ConfigQrcode: React.FC = () => {
                         setAlertOpen(true);
                     }
                 }
-            }} label="Password" type="password"></InputDialog>
+            }} onVerify={
+                (value) => {
+                    if (value === "") {
+                        return {state: false, msg: "Password cannot be empty"};
+                    }
+                    if (value.length < 6) {
+                        return {state: false, msg: "Password length must be greater than 6"};
+                    }
+                    return {state: true, msg: ""};
+                }
+            } label="Password" type="password"></InputDialog>
             {errorAlert && (<Alert severity="error">
                 <AlertTitle>Error</AlertTitle>
                 {error}
@@ -284,7 +297,8 @@ const ConfigQrcode: React.FC = () => {
                                 setInputOpen(true)
                             }} disabled={disableGenerateQRCode}
                                     variant="contained">Send configuration</Button>
-                            <Button type="submit" variant="contained" color="secondary" disabled={disableGenerateQRCode}>Generate QR
+                            <Button type="submit" variant="contained" color="secondary"
+                                    disabled={disableGenerateQRCode}>Generate QR
                                 Code</Button>
                         </Box>
                     </form>
