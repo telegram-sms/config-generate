@@ -1,7 +1,7 @@
 {
-  "name": "material-ui-vite-ts",
+  "name": "telegram-sms-config",
   "private": true,
-  "version": "5.0.0",
+  "version": "1.0.0",
   "type": "module",
   "scripts": {
     "dev": "vite",
