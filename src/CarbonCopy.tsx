@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react";
-import {Tab, Tabs, Box} from "@mui/material";
+import {Tab, Tabs, Box, useMediaQuery} from "@mui/material";
 import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
 import Lark from "./carbon_copy/lark";
@@ -7,6 +7,11 @@ import PushDeer from "./carbon_copy/pushdeer";
 
 
 const CarbonCopy: React.FC = () => {
+    const isNonMobile = useMediaQuery('(min-width:600px)');
+    let padding: any = "20px";
+    if (!isNonMobile) {
+        padding = null;
+    }
     const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer"];
 
     const [value, setValue] = useState(0);
@@ -42,22 +47,28 @@ const CarbonCopy: React.FC = () => {
             }}>
                 <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Carbon Copy Config Generator</Box>
             </Box>
-            <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
+            <Box sx={{
+                borderBottom: 1,
+                borderColor: 'divider',
+                paddingLeft: padding,
+                paddingRight: padding,
+                paddingBottom: "20px"
+            }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label={tabLabels[0]} {...a11yProps(0)} />
                     <Tab label={tabLabels[1]} {...a11yProps(1)} />
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
                 </Tabs>
+                <CustomTabPanel value={value} index={0}>
+                    <Bark/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                    <Lark/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={2}>
+                    <PushDeer/>
+                </CustomTabPanel>
             </Box>
-            <CustomTabPanel value={value} index={0}>
-                <Bark/>
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={1}>
-                <Lark/>
-            </CustomTabPanel>
-            <CustomTabPanel value={value} index={2}>
-                <PushDeer/>
-            </CustomTabPanel>
         </Box>
     );
 }

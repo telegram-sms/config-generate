@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
+import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField, useMediaQuery} from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
@@ -21,6 +21,11 @@ interface FormData {
 }
 
 const ConfigQrcode: React.FC = () => {
+    const isNonMobile = useMediaQuery('(min-width:600px)');
+    let padding: any = "20px";
+    if (!isNonMobile) {
+        padding = null;
+    }
     useEffect(() => {
         document.title = "Config Generator - Telegram SMS";
     }, []);
@@ -228,13 +233,12 @@ const ConfigQrcode: React.FC = () => {
                 }}>
                     <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Telegram SMS Config Generator</Box>
                 </Box>
-                <Box component="section">
+                <Box component="section" sx={{padding: padding}}>
                     <form onSubmit={handleSubmit}>
                         <Box sx={{
                             display: "flex",
                             flexDirection: "column",
-                            gap: 2,
-                            margin: "1em 0"
+                            gap: 2
                         }}>
                             <TextField type="text" name="bot_token"
                                        value={formData.bot_token} onChange={handleChange} label="Bot Token"
@@ -258,7 +262,7 @@ const ConfigQrcode: React.FC = () => {
                             display: "flex",
                             flexDirection: "column",
                             gap: 1,
-                            margin: "em 0"
+                            margin: "1em 0"
                         }}>
                             <FormControlLabel control={<Switch
                                 name="battery_monitoring_switch"
@@ -319,7 +323,7 @@ const ConfigQrcode: React.FC = () => {
                         <img src={qrCode} alt="QR Code"/>
                     </Box>
                 </Box>
-                <Box component="section" sx={{paddingBottom: "2em"}}>
+                <Box component="section" sx={{paddingLeft: padding, paddingBottom: "20px", paddingRight: padding}}>
                     <p>This is a tool to help you generate a QR code with Telegram SMS configuration in your
                         browser.
                         You can use Telegram SMS to scan this QR code, which will allow you to quickly apply your
