@@ -4,14 +4,15 @@ import { ThemeProvider } from '@mui/material/styles';
 import { CssBaseline } from '@mui/material';
 import theme from './theme';
 // import App from './App';
-import CarbonCopy from "./CarbonCopy";
-import ConfigQrcode from "./ConfigQrcode";
+// import CarbonCopy from "./CarbonCopy";
+// import ConfigQrcode from "./ConfigQrcode";
+import {App} from "./App";
 
 ReactDOM.createRoot(document.getElementById('root')!).render(
   <React.StrictMode>
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <ConfigQrcode/>
+      <App />
     </ThemeProvider>
   </React.StrictMode>,
 );
