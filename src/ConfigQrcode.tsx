@@ -237,18 +237,15 @@ const ConfigQrcode: React.FC = () => {
                             gap: 2,
                             margin: "1em 0"
                         }}>
-                            <TextField id="bot-token" type="text"
-                                       name="bot_token"
+                            <TextField type="text"
                                        value={formData.bot_token} onChange={handleChange} label="Bot Token"
                                        variant="outlined" required/>
                             <TextField ref={chatIDRef} name="chat_id" value={formData.chat_id}
                                        onChange={handleChange}
-                                       id="bot-chat_id"
                                        label="Chat ID"
                                        variant="outlined" required/>
                             <TextField
                                 style={{display: groupMode ? 'flex' : 'none'}}
-                                name="topic_id"
                                 onChange={handleChange}
                                 value={formData.topic_id} label="Topic ID" variant="outlined"/>
                             <TextField
@@ -263,32 +260,32 @@ const ConfigQrcode: React.FC = () => {
                             gap: 1,
                             margin: "em 0"
                         }}>
-                            <FormControlLabel control={<Switch name="battery_monitoring_switch"
-                                                               checked={formData.battery_monitoring_switch}
-                                                               onChange={handleChange}/>}
+                            <FormControlLabel control={<Switch
+                                checked={formData.battery_monitoring_switch}
+                                onChange={handleChange}/>}
                                               label="Monitor battery level change"/>
                             <FormControlLabel
                                 style={{display: formData.battery_monitoring_switch ? 'block' : 'none'}}
-                                control={<Switch name="charger_status"
-                                                 checked={formData.charger_status}
-                                                 onChange={handleChange}/>}
+                                control={<Switch
+                                    checked={formData.charger_status}
+                                    onChange={handleChange}/>}
                                 label="Monitor charger status"/>
-                            <FormControlLabel control={<Switch name="chat_command"
-                                                               checked={formData.chat_command}
-                                                               onChange={handleChange}/>}
+                            <FormControlLabel control={<Switch
+                                checked={formData.chat_command}
+                                onChange={handleChange}/>}
                                               label="Response to chat command"/>
-                            <FormControlLabel control={<Switch name="fallback_sms"
-                                                               checked={formData.fallback_sms}
-                                                               onChange={handleChange}/>}
+                            <FormControlLabel control={<Switch
+                                checked={formData.fallback_sms}
+                                onChange={handleChange}/>}
                                               label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel style={{display: groupMode ? 'block' : 'none'}}
-                                              control={<Switch name="privacy_mode"
-                                                               checked={formData.privacy_mode}
-                                                               onChange={handleChange}/>}
+                                              control={<Switch
+                                                  checked={formData.privacy_mode}
+                                                  onChange={handleChange}/>}
                                               label="Respond only to commands containing the Bot username"/>
-                            <FormControlLabel control={<Switch name="verification_code"
-                                                               checked={formData.verification_code}
-                                                               onChange={handleChange}/>}
+                            <FormControlLabel control={<Switch
+                                checked={formData.verification_code}
+                                onChange={handleChange}/>}
                                               label="Verification code automatic extraction (Alpha)"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
@@ -302,13 +299,10 @@ const ConfigQrcode: React.FC = () => {
                                 Code</Button>
                         </Box>
                     </form>
-                    <Box sx={{
-                        display: value ? 'none' : 'flex',
-                        justifyContent: 'center',
-                        alignItems: 'center',
-                        marginTop: '1em'
-                    }}>
-                        Your generated QR Code will be displayed here
+                    <Box sx={{display: value ? 'none' : 'block', marginTop: '1em'}}>
+                        <Alert variant="filled" severity="info">
+                            Your generated QR Code will be displayed here
+                        </Alert>
                     </Box>
                     <Box sx={{
                         display: value ? 'flex' : 'none',
@@ -323,7 +317,9 @@ const ConfigQrcode: React.FC = () => {
                     <p>This is a tool to help you generate a QR code with Telegram SMS configuration in your
                         browser.
                         You can use Telegram SMS to scan this QR code, which will allow you to quickly apply your
-                        configuration.</p>
+                        configuration. You can also use the Send configuration method to fetch the encrypted message
+                        from the
+                        cloud.</p>
                     <h2>Important Notice</h2>
                     <p>Since bot keys are very sensitive data, this tool will not upload any clear text configuration
                         files to any server. You can get
@@ -331,6 +327,8 @@ const ConfigQrcode: React.FC = () => {
                                        target="_blank"
                                        rel="noopener noreferrer">here</a>.</p>
                     <h2>Acknowledgements</h2>
+                    <p><a href="https://react.dev/" target="_blank">React</a></p>
+                    <p><a href="https://mui.com/" target="_blank">Material-UI</a></p>
                     <p><a href="https://github.com/neocotic/qrious" target="_blank"
                           rel="noopener noreferrer">QRious</a>
                     </p>

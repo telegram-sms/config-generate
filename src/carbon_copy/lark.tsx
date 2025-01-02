@@ -44,7 +44,7 @@ function Lark() {
                     setServer(event.target.value.trim());
                 }} label="Webhook URL"
                            variant="outlined" required/>
-                <Button type="submit" onClick={(event) => {
+                <Button type="submit" disabled={server.trim()===""} onClick={(event) => {
                     event.preventDefault();
                     formData.webhook = server;
                     formData.body = JSON.stringify(body);

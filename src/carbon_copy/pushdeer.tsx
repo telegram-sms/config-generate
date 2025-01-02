@@ -4,12 +4,12 @@ import {useQrious} from "react-qrious";
 
 function PushDeer() {
     const formData = {
-            method: 1,
-            webhook: "",
-            body: "",
-            enabled: true,
-            header: ""
-        };
+        method: 1,
+        webhook: "",
+        body: "",
+        enabled: true,
+        header: ""
+    };
 
 
     const [server, setServer] = useState("api2.pushdeer.com");
@@ -33,7 +33,7 @@ function PushDeer() {
                     setKey(event.target.value.trim());
                 }} label="Pushkey"
                            variant="outlined" required/>
-                <Button type="submit" onClick={(event) => {
+                <Button type="submit" disabled={server.trim() === "" || key.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Message}}&type=markdown`;
                     setValue(JSON.stringify(formData));

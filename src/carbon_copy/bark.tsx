@@ -43,7 +43,7 @@ function Bark() {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sounds"/>}
                 />
-                <Button type="submit" onClick={(event) => {
+                <Button type="submit" disabled={server.trim()===""} onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
                     const formData = {

@@ -37,7 +37,7 @@ const CarbonCopy: React.FC = () => {
                 boxSizing: "border-box",
                 borderBottom: "2px dashed #ddd"
             }}>
-                <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Telegram SMS Config Generator</Box>
+                <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Carbon Copy Config Generator</Box>
             </Box>
             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
