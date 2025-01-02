@@ -1,4 +1,4 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {Tab, Tabs, Box} from "@mui/material";
 import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
@@ -7,10 +7,13 @@ import PushDeer from "./carbon_copy/pushdeer";
 
 
 const CarbonCopy: React.FC = () => {
+    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer"];
+
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
+        document.title = `${tabLabels[value]} - Carbon Copy Config Generator - Telegram SMS`;
     };
 
     const a11yProps = (index: number) => {

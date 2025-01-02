@@ -5,7 +5,7 @@ import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
-import './wasm_exec.js';
+import {encrypt} from "./wasm";
 
 interface FormData {
     bot_token: string;
@@ -21,6 +21,9 @@ interface FormData {
 }
 
 const ConfigQrcode: React.FC = () => {
+    useEffect(() => {
+        document.title = "Telegram SMS Config Generator - Telegram SMS";
+    }, []);
     const [formData, setFormData] = useState<FormData>({
         bot_token: '',
         chat_id: '',
@@ -48,8 +51,8 @@ const ConfigQrcode: React.FC = () => {
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 20, mime: 'image/png'});
     const [errorAlert, setErrorAlert] = useState(false);
     const [error, setError] = useState('');
-    const [disableGetChatId, setDisableGetChatId] = useState(false);
-    const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(false);
+    const [disableGetChatId, setDisableGetChatId] = useState(true);
+    const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(true);
     const [progressMessage, setProgressMessage] = useState("Please send some messages to the bot...");
 
     useEffect(() => {
@@ -60,6 +63,10 @@ const ConfigQrcode: React.FC = () => {
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const {name, value, type, checked} = e.target;
+        if (name === 'chat_id' && !/^-?\d*$/.test(value)) {
+            return; // Ignore non-numeric input
+        }
+        console.log(name, value, type, checked);
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
@@ -141,16 +148,9 @@ const ConfigQrcode: React.FC = () => {
 
     async function handleSendConfig(password: string) {
         const configJson = JSON.stringify(formData)
-        const response = await fetch('crypto.wasm');
-        const buffer = await response.arrayBuffer();
-        const module = await WebAssembly.compile(buffer);
-        const go = new window.Go();
-        const instance = new WebAssembly.Instance(module, go.importObject);
-        go.run(instance);
-        // @ts-ignore
-        const result = window.encrypt(configJson, password);
+        const result = encrypt(configJson, password);
         const data = {
-            encrypt: result.result
+            encrypt: result
         }
         setProgressMessage("Transmitting, please wait...");
         setProgressOpen(true);
@@ -203,8 +203,7 @@ const ConfigQrcode: React.FC = () => {
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
-                                  ...formData,
-                                  chat_id: chatIDList[index],
+                                  ...formData, chat_id: chatIDList[index],
                                   topic_id: chatThreadIDList[index],
                               });
                               chatIDRef.current?.focus();
@@ -237,7 +236,7 @@ const ConfigQrcode: React.FC = () => {
                             gap: 2,
                             margin: "1em 0"
                         }}>
-                            <TextField type="text"
+                            <TextField type="text" name="bot_token"
                                        value={formData.bot_token} onChange={handleChange} label="Bot Token"
                                        variant="outlined" required/>
                             <TextField ref={chatIDRef} name="chat_id" value={formData.chat_id}
@@ -245,6 +244,7 @@ const ConfigQrcode: React.FC = () => {
                                        label="Chat ID"
                                        variant="outlined" required/>
                             <TextField
+                                name="topic_id"
                                 style={{display: groupMode ? 'flex' : 'none'}}
                                 onChange={handleChange}
                                 value={formData.topic_id} label="Topic ID" variant="outlined"/>
@@ -261,29 +261,35 @@ const ConfigQrcode: React.FC = () => {
                             margin: "em 0"
                         }}>
                             <FormControlLabel control={<Switch
+                                name="battery_monitoring_switch"
                                 checked={formData.battery_monitoring_switch}
                                 onChange={handleChange}/>}
                                               label="Monitor battery level change"/>
                             <FormControlLabel
                                 style={{display: formData.battery_monitoring_switch ? 'block' : 'none'}}
                                 control={<Switch
+                                    name="charger_status"
                                     checked={formData.charger_status}
                                     onChange={handleChange}/>}
                                 label="Monitor charger status"/>
                             <FormControlLabel control={<Switch
+                                name="chat_command"
                                 checked={formData.chat_command}
                                 onChange={handleChange}/>}
                                               label="Response to chat command"/>
                             <FormControlLabel control={<Switch
+                                name="fallback_sms"
                                 checked={formData.fallback_sms}
                                 onChange={handleChange}/>}
                                               label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel style={{display: groupMode ? 'block' : 'none'}}
                                               control={<Switch
+                                                  name="privacy_mode"
                                                   checked={formData.privacy_mode}
                                                   onChange={handleChange}/>}
                                               label="Respond only to commands containing the Bot username"/>
                             <FormControlLabel control={<Switch
+                                name="verification_code"
                                 checked={formData.verification_code}
                                 onChange={handleChange}/>}
                                               label="Verification code automatic extraction (Alpha)"/>

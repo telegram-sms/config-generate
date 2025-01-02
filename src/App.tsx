@@ -64,7 +64,7 @@ function NavBar() {
                         <MenuIcon />
                     </IconButton>
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-                        Telegram SMS Config Generator
+                        Telegram SMS
                     </Typography>
                 </Toolbar>
             </AppBar>

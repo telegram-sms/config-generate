@@ -22,4 +22,5 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
-/public/crypto.wasm
+/src/wasm/crypto.wasm
+!/vite.config.ts
