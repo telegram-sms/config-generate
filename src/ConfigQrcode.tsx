@@ -89,37 +89,35 @@ const ConfigQrcode: React.FC = () => {
         e.preventDefault();
         setValue(JSON.stringify(formData));
     };
-    const handleGetRecentChatID = () => {
+    const handleGetRecentChatID = async () => {
         setProgressMessage("Please send some messages to the bot...");
         setProgressOpen(true);
-        fetch('https://api.telegram.org/bot' + formData.bot_token + '/getUpdates?timeout=120')
-            .then(response => response.json())
-            .then(data => {
-                if (data.result.length === 0) {
-                    setError('No recent chat ID found');
-                    setErrorAlert(true);
-                    return;
-                }
-                const {
-                    chatNameList,
-                    chatIdList,
-                    chatThreadIdList,
-                } = fetchChatList(data);
-                setChatIDList(chatIdList);
-                setChatThreadIDList(chatThreadIdList);
-                setLists(chatNameList);
-                setSelectOpen(true);
-            })
-            .catch(error => {
-                setError(error.message);
+        try {
+            const response = await fetch('https://api.telegram.org/bot' + formData.bot_token + '/getUpdates?timeout=120');
+            if (!response.ok) {
+                throw new Error('Network response: ' + response.status);
+            }
+            const data = await response.json();
+            if (data.result.length === 0) {
+                setError('No recent chat ID found');
                 setErrorAlert(true);
-            })
-            .finally(() => {
-                setProgressOpen(false);
-                setTimeout(() => {
-                    setErrorAlert(false);
-                }, 5000);
-            });
+                return;
+            }
+            const {chatNameList, chatIdList, chatThreadIdList} = fetchChatList(data);
+            setChatIDList(chatIdList);
+            setChatThreadIDList(chatThreadIdList);
+            setLists(chatNameList);
+            setSelectOpen(true);
+        } catch (error) {
+            // @ts-ignore
+            setError(error.message);
+            setErrorAlert(true);
+        } finally {
+            setProgressOpen(false);
+            setTimeout(() => {
+                setErrorAlert(false);
+            }, 5000);
+        }
     };
 
     function fetchChatList(message: any) {
@@ -199,12 +197,10 @@ const ConfigQrcode: React.FC = () => {
                     return {state: true, msg: ""};
                 }
             } label="Password" type="password"></InputDialog>
-            {errorAlert && (<Alert severity="error">
-                <AlertTitle>Error</AlertTitle>
-                {error}
-            </Alert>)}
             <AlertDialog open={alertOpen} title="Send configuration" message={alertMessage}
                          onClose={() => setAlertOpen(false)}/>
+            <AlertDialog open={errorAlert} title="Error" message={error}
+                         onClose={() => setErrorAlert(false)}/>
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
