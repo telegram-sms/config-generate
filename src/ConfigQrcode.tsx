@@ -22,7 +22,7 @@ interface FormData {
 
 const ConfigQrcode: React.FC = () => {
     useEffect(() => {
-        document.title = "Telegram SMS Config Generator - Telegram SMS";
+        document.title = "Config Generator - Telegram SMS";
     }, []);
     const [formData, setFormData] = useState<FormData>({
         bot_token: '',

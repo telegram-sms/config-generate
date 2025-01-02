@@ -5,7 +5,7 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "cd wasm-rs && cargo build && wasm-pack build && cp pkg/* ../src/wasm && cd .. && tsc && vite build",
+    "build": "tsc && vite build",
     "build:wasm": "cd wasm-rs && cargo build && wasm-pack build && cp pkg/* ../src/wasm",
     "preview": "vite preview"
   },
