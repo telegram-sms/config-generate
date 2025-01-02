@@ -28,7 +28,9 @@ jobs:
           mkdir src/wasm
           npm run build:wasm
       - name: Install dependencies
-        run: npm install
+        run: |
+          npm install
+          npm install -g netlify-cli
 
       - name: Build project
         run: npm run build
@@ -36,4 +38,4 @@ jobs:
       - name: Deploy to Netlify
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-        run: npx netlify deploy --prod --dir=dist
+        run: netlify deploy --prod --dir=dist
