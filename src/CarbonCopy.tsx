@@ -44,9 +44,9 @@ const CarbonCopy: React.FC = () => {
             </Box>
             <Box sx={{borderBottom: 1, borderColor: 'divider'}}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
-                    <Tab label="Bark" {...a11yProps(0)} />
-                    <Tab label="Lark (Feishu)" {...a11yProps(1)} />
-                    <Tab label="Pushdeer" {...a11yProps(2)} />
+                    <Tab label={tabLabels[0]} {...a11yProps(0)} />
+                    <Tab label={tabLabels[1]} {...a11yProps(1)} />
+                    <Tab label={tabLabels[2]} {...a11yProps(2)} />
                 </Tabs>
             </Box>
             <CustomTabPanel value={value} index={0}>
