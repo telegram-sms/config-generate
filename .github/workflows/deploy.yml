@@ -25,6 +25,7 @@ jobs:
           cargo install wasm-pack
       - name: Build Rust
         run: |
+          mkdir src/wasm
           npm run build:wasm
       - name: Install dependencies
         run: npm install
