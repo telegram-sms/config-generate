@@ -5,7 +5,7 @@ import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
-import {encrypt} from "./wasm/wasm_rs";
+import {encrypt} from "./wasm";
 
 interface FormData {
     bot_token: string;
@@ -229,7 +229,7 @@ const ConfigQrcode: React.FC = () => {
                 }}>
                     <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Telegram SMS Config Generator</Box>
                 </Box>
-                <Box component="section" sx={{padding: padding}}>
+                <Box component="section" sx={{paddingLeft:padding,paddingRight:padding,paddingBottom:"20px",paddingTop:"20px"}}>
                     <form onSubmit={handleSubmit}>
                         <Box sx={{
                             display: "flex",
