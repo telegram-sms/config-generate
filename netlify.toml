@@ -1,12 +1,3 @@
-[build]
-  publish = "dist"
-  command = "npm run build"
-
-[build.environment]
-  RUSTUP_HOME = "/opt/buildhome/.rustup"
-  CARGO_HOME = "/opt/buildhome/.cargo"
-  PATH = "/opt/buildhome/.cargo/bin:$PATH"
-
 [[redirects]]
   from = "/*"
   to = "/index.html"
