@@ -6,6 +6,7 @@ import SimpleDialog from "./components/SimpleDialog";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
 import {encrypt} from "./wasm";
+import getHttpStatusMessage from "./constants/http";
 
 interface FormData {
     bot_token: string;
@@ -95,7 +96,7 @@ const ConfigQrcode: React.FC = () => {
         try {
             const response = await fetch('https://api.telegram.org/bot' + formData.bot_token + '/getUpdates?timeout=120');
             if (!response.ok) {
-                throw new Error('Network response: ' + response.status);
+                throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
             const data = await response.json();
             if (data.result.length === 0) {
@@ -165,6 +166,9 @@ const ConfigQrcode: React.FC = () => {
                 },
                 body: JSON.stringify(data)
             });
+            if (!response.ok) {
+                throw new Error('Network response: ' + getHttpStatusMessage(response.status));
+            }
             return await response.json();
         } catch (error) {
             console.error('Error:', error);
