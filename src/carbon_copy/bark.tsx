@@ -31,7 +31,8 @@ function Bark() {
                                                    checked={useRingtone}
                                                    onChange={() => {
                                                        useRingtone ? setUseRingtone(false) : setUseRingtone(true);
-                                                   }}/>}
+                                                   }}
+                                                   color="secondary"/>}
                                   label="Using RingTone"/>
                 <Autocomplete
                     style={{display: useRingtone ? 'block' : 'none'}}
