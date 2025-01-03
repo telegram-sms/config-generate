@@ -29,10 +29,6 @@ const theme = createTheme({
       styleOverrides: {
         switchBase: {
           color: '#dcdcdc',
-          '&.Mui-checked': {
-            color: '#ffb049', // secondary main color
-          },
-          // secondary main color
         },
       },
     },

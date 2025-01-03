@@ -109,8 +109,7 @@ const ConfigQrcode: React.FC = () => {
             setChatThreadIDList(chatThreadIdList);
             setLists(chatNameList);
             setSelectOpen(true);
-        } catch (error) {
-            // @ts-ignore
+        } catch (error: any) {
             setError(error.message);
             setErrorAlert(true);
         } finally {
@@ -170,8 +169,9 @@ const ConfigQrcode: React.FC = () => {
                 throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
             return await response.json();
-        } catch (error) {
-            console.error('Error:', error);
+        } catch (error: any) {
+            setError(error.message);
+            setErrorAlert(true);
         } finally {
             setProgressOpen(false);
         }
@@ -233,7 +233,8 @@ const ConfigQrcode: React.FC = () => {
                 }}>
                     <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Telegram SMS Config Generator</Box>
                 </Box>
-                <Box component="section" sx={{paddingLeft:padding,paddingRight:padding,paddingBottom:"20px",paddingTop:"20px"}}>
+                <Box component="section"
+                     sx={{paddingLeft: padding, paddingRight: padding, paddingBottom: "20px", paddingTop: "20px"}}>
                     <form onSubmit={handleSubmit}>
                         <Box sx={{
                             display: "flex",
@@ -267,35 +268,42 @@ const ConfigQrcode: React.FC = () => {
                             <FormControlLabel control={<Switch
                                 name="battery_monitoring_switch"
                                 checked={formData.battery_monitoring_switch}
-                                onChange={handleChange}/>}
+                                onChange={handleChange}
+                                color="secondary"/>}
                                               label="Monitor battery level change"/>
                             <FormControlLabel
                                 style={{display: formData.battery_monitoring_switch ? 'block' : 'none'}}
                                 control={<Switch
                                     name="charger_status"
                                     checked={formData.charger_status}
-                                    onChange={handleChange}/>}
+                                    onChange={handleChange}
+                                    color="secondary"/>}
                                 label="Monitor charger status"/>
                             <FormControlLabel control={<Switch
                                 name="chat_command"
                                 checked={formData.chat_command}
-                                onChange={handleChange}/>}
+                                onChange={handleChange}
+                                color="secondary"/>}
                                               label="Response to chat command"/>
                             <FormControlLabel control={<Switch
                                 name="fallback_sms"
                                 checked={formData.fallback_sms}
-                                onChange={handleChange}/>}
+                                onChange={handleChange}
+                                color="secondary"/>}
                                               label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel style={{display: groupMode ? 'block' : 'none'}}
                                               control={<Switch
                                                   name="privacy_mode"
                                                   checked={formData.privacy_mode}
-                                                  onChange={handleChange}/>}
+                                                  onChange={handleChange}
+                                                  color="secondary"/>}
                                               label="Respond only to commands containing the Bot username"/>
-                            <FormControlLabel control={<Switch
+                            <FormControlLabel
+                                control={<Switch
                                 name="verification_code"
                                 checked={formData.verification_code}
-                                onChange={handleChange}/>}
+                                onChange={handleChange}
+                                color="secondary"/>}
                                               label="Verification code automatic extraction (Alpha)"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
