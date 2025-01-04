@@ -27,15 +27,12 @@ This project is a configuration generator for Telegram SMS. It provides a user-f
 2. Install dependencies:
     ```sh
     npm install
-    cargo build
     ```
 3. Build the wasm project:
     ```sh
     cargo install wasm-pack
-    cd wasm-rs
-    wasm-pack build
     mkdir -p ../src/wasm
-    cp pkg/* ../src/wasm/
+    npm run build:wasm
     ```
 4. Start the development server:
     ```sh

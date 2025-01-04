@@ -6,7 +6,7 @@
   "scripts": {
     "dev": "vite",
     "build": "tsc && vite build",
-    "build:wasm": "cd wasm-rs && cargo build && wasm-pack build && cp pkg/* ../src/wasm",
+    "build:wasm": "cd wasm-rs && cargo build && wasm-pack build && npx shx cp pkg/* ../src/wasm",
     "preview": "vite preview"
   },
   "dependencies": {
@@ -27,10 +27,10 @@
     "@types/react": "18.3.1",
     "@types/react-dom": "18.3.1",
     "@vitejs/plugin-react": "latest",
+    "shx": "^0.3.4",
     "typescript": "latest",
     "vite": "latest",
     "vite-plugin-top-level-await": "^1.4.4",
     "vite-plugin-wasm": "^3.4.1"
   }
 }
-
