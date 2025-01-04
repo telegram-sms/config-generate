@@ -1,39 +1,47 @@
-# Material UI - Vite.js in TypeScript example
+# Telegram SMS Config generator
 
-## How to use
+## Description
+This project is a configuration generator for Telegram SMS. It provides a user-friendly interface built with React for managing configurations. The project supports encryption and decryption of data using Rust and WebAssembly, ensuring secure handling of sensitive information. It leverages Node.js and npm for package management and build processes, and integrates with Rust and Cargo for cryptographic operations.
 
-Download the example [or clone the repo](https://github.com/mui/material-ui):
+## Features
+- Generates configuration for Telegram SMS
+- Supports encryption and decryption of data using Rust and WebAssembly
+- Provides a React-based user interface for configuration management
+- Utilizes Node.js and npm for package management and build processes
+- Integrates with Rust and Cargo for cryptographic operations
 
-<!-- #default-branch-switch -->
+## Installation
 
-```bash
-curl https://codeload.github.com/mui/material-ui/tar.gz/master | tar -xz --strip=2 material-ui-master/examples/material-ui-vite-ts
-cd material-ui-vite-ts
-```
+### Prerequisites
+- Node.js
+- npm
+- Rust
+- Cargo
 
-Install it and run:
+### Steps
+1. Clone the repository:
+    ```sh
+    git clone https://github.com/telegram-sms/config-generate.git
+    cd config-generate
+    ```
+2. Install dependencies:
+    ```sh
+    npm install
+    cargo build
+    ```
+3. Build the wasm project:
+    ```sh
+    cargo install wasm-pack
+    cd wasm-rs
+    wasm-pack build
+    mkdir -p ../src/wasm
+    cp pkg/* ../src/wasm/
+    ```
+4. Start the development server:
+    ```sh
+   
+    npm run dev
+    ```
 
-```bash
-npm install
-npm run dev
-```
-
-or:
-
-<!-- #default-branch-switch -->
-
-[![Edit on StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz.svg)](https://stackblitz.com/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
-
-[![Edit on CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/p/sandbox/github/mui/material-ui/tree/master/examples/material-ui-vite-ts)
-
-## The idea behind the example
-
-This example uses [Vite.js](https://github.com/vitejs/vite).
-It includes `@mui/material` and its peer dependencies, including [Emotion](https://emotion.sh/docs/introduction), the default style engine in Material UI v6.
-
-## What's next?
-
-<!-- #default-branch-switch -->
-
-You now have a working example project.
-You can head back to the documentation and continue by browsing the [templates](https://mui.com/material-ui/getting-started/templates/) section.
+## License
+This project is licensed under the BSD 3-Clause License - see the `LICENSE` file for details.
