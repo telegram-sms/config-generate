@@ -48,9 +48,12 @@ function PushDeer() {
             </Box>
             <Box sx={{
                 display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center", backgroundColor: "#fff",
+                padding: "1em",
             }}>
-                <img src={qrCode} alt="QR Code"/>
+                <img src={qrCode} alt="QR Code" style={{
+                    maxWidth: '100%', height: 'auto'
+                }}/>
             </Box>
         </>
     );

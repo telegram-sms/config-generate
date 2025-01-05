@@ -6,7 +6,7 @@ function Bark() {
     const [server, setServer] = useState("");
     const [icon, setIcon] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4");
     const [value, setValue] = useState("");
-    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
+    const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
     const barkSounds = [
         "alarm", "anticipate", "bell", "birdsong", "bloom", "calypso", "chime", "choo", "descent", "electronic", "fanfare", "gathering", "glass", "gotosleep", "healthnotification", "horn", "ladder", "mailsent", "minuet", "multiwayinvitation", "newmail", "newsflash", "noir", "paymentsuccess", "shake", "sherwoodforest", "silence", "spell", "suspense", "telegraph", "tiptoes", "typewriters", "update", "uplift", "voicemail"
     ];
@@ -44,7 +44,7 @@ function Bark() {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sounds"/>}
                 />
-                <Button type="submit" disabled={server.trim()===""} onClick={(event) => {
+                <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
                     const formData = {
@@ -69,9 +69,12 @@ function Bark() {
             </Box>
             <Box sx={{
                 display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
-                justifyContent: "center"
+                justifyContent: "center", backgroundColor: "#fff",
+                padding: "1em",
             }}>
-                <img src={qrCode} alt="QR Code"/>
+                <img src={qrCode} alt="QR Code" style={{
+                    maxWidth: '100%', height: 'auto'
+                }}/>
             </Box>
         </>
     );
