@@ -1,5 +1,5 @@
 import {Alert, Box, Button, TextField} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
 function PushDeer() {
