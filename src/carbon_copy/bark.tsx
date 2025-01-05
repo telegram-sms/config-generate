@@ -1,5 +1,5 @@
 import {Alert, Autocomplete, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
 function Bark() {
@@ -54,7 +54,7 @@ function Bark() {
                         enabled: true,
                         header: ""
                     }
-                    formData.webhook = `https://${host}/${key}/{{Title}}/{{Message}}?copy={{Copy}}&icon=${encodeURIComponent(icon)}`;
+                    formData.webhook = `https://${host}/${key}/{{Title}}/{{Message}}?copy={{Code}}&icon=${encodeURIComponent(icon)}`;
                     if (useRingtone) {
                         formData.webhook += `&sound=${ringtone}`;
                     }
