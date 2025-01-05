@@ -9,7 +9,8 @@ import {
     ListItem,
     ListItemButton,
     ListItemIcon,
-    ListItemText
+    ListItemText,
+    useColorScheme
 } from "@mui/material";
 import MenuIcon from '@mui/icons-material/Menu';
 import Home from '@mui/icons-material/Home';
@@ -75,8 +76,13 @@ function NavBar() {
     );
 }
 
+
 export function App() {
-    return (
+    const { mode, setMode } = useColorScheme();
+    if (!mode) {
+        return null;
+    }
+    return(
         <Router>
             <NavBar />
             <Box sx={{ padding: 3 }}>
