@@ -54,7 +54,7 @@ const ConfigQrcode: React.FC = () => {
     const groupMode = formData.chat_id && Number(formData.chat_id) < 0;
     const chatIDRef = useRef<HTMLInputElement>(null);
     const [value, setValue] = useState('');
-    const [qrCode, _qrious] = useQrious({value, size: 512, padding: 20, mime: 'image/png'});
+    const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
     const [errorAlert, setErrorAlert] = useState(false);
     const [error, setError] = useState('');
     const [disableGetChatId, setDisableGetChatId] = useState(true);
@@ -300,11 +300,11 @@ const ConfigQrcode: React.FC = () => {
                                               label="Respond only to commands containing the Bot username"/>
                             <FormControlLabel
                                 control={<Switch
-                                name="verification_code"
-                                checked={formData.verification_code}
-                                onChange={handleChange}
-                                color="secondary"/>}
-                                              label="Verification code automatic extraction (Alpha)"/>
+                                    name="verification_code"
+                                    checked={formData.verification_code}
+                                    onChange={handleChange}
+                                    color="secondary"/>}
+                                label="Verification code automatic extraction (Alpha)"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
                                 ID</Button>
@@ -325,10 +325,14 @@ const ConfigQrcode: React.FC = () => {
                     <Box sx={{
                         display: value ? 'flex' : 'none',
                         justifyContent: 'center',
+                        backgroundColor: "#fff",
+                        padding: "1em",
                         alignItems: 'center',
                         marginTop: '1em'
                     }}>
-                        <img src={qrCode} alt="QR Code"/>
+                        <img src={qrCode} alt="QR Code" style={{
+                            maxWidth: '100%', height: 'auto'
+                        }}/>
                     </Box>
                 </Box>
                 <Box component="section" sx={{paddingLeft: padding, paddingBottom: "20px", paddingRight: padding}}>
