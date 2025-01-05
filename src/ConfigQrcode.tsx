@@ -1,5 +1,5 @@
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AlertTitle, Box, Button, FormControlLabel, Switch, TextField, useMediaQuery} from "@mui/material";
+import {Alert, AlertTitle, Box, Button, FormControlLabel, Link, Switch, TextField, useMediaQuery} from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
@@ -345,14 +345,14 @@ const ConfigQrcode: React.FC = () => {
                     <h2>Important Notice</h2>
                     <p>Since bot keys are very sensitive data, this tool will not upload any clear text configuration
                         files to any server. You can get
-                        source code <a href="https://github.com/telegram-sms/config-generate"
+                        source code <Link href="https://github.com/telegram-sms/config-generate"
                                        target="_blank"
-                                       rel="noopener noreferrer">here</a>.</p>
+                                       rel="noopener noreferrer">here</Link>.</p>
                     <h2>Acknowledgements</h2>
-                    <p><a href="https://react.dev/" target="_blank">React</a></p>
-                    <p><a href="https://mui.com/" target="_blank">Material-UI</a></p>
-                    <p><a href="https://github.com/neocotic/qrious" target="_blank"
-                          rel="noopener noreferrer">QRious</a>
+                    <p><Link href="https://react.dev/" target="_blank">React</Link></p>
+                    <p><Link href="https://mui.com/" target="_blank">Material-UI</Link></p>
+                    <p><Link href="https://github.com/neocotic/qrious" target="_blank"
+                          rel="noopener noreferrer">QRious</Link>
                     </p>
                 </Box>
             </Box>
