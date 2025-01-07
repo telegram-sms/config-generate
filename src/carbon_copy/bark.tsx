@@ -12,6 +12,13 @@ function Bark() {
     ];
     const [useRingtone, setUseRingtone] = useState(false);
     const [ringtone, setRingtone] = useState("alarm");
+    const barkGroups = [
+        "{{Title}}", "Telegram SMS", "Home", "Work"
+    ];
+    const [useGroup, setUseGroup] = useState(false);
+    const [group, setGroup] = useState("{{Title}}");
+    const [useTimeSensitive, setTimeSensitive] = useState(false);
+
     return (
         <>
             <Box sx={{
@@ -27,6 +34,13 @@ function Bark() {
                 <TextField type="text" value={icon} onChange={(event) => {
                     setIcon(event.target.value.trim());
                 }} label="Icon URL" variant="outlined" required/>
+                <FormControlLabel control={<Switch name="time_sensitive"
+                                                   checked={useTimeSensitive}
+                                                   onChange={() => {
+                                                       useTimeSensitive ? setTimeSensitive(false) : setTimeSensitive(true);
+                                                   }}
+                                                   color="secondary"/>}
+                                  label="Time Sensitive"/>
                 <FormControlLabel control={<Switch name="fallback_sms"
                                                    checked={useRingtone}
                                                    onChange={() => {
@@ -44,6 +58,23 @@ function Bark() {
                     }}
                     renderInput={(params) => <TextField {...params} label="Sounds"/>}
                 />
+                <FormControlLabel control={<Switch name="use_group"
+                                                   checked={useGroup}
+                                                   onChange={() => {
+                                                       useGroup ? setUseGroup(false) : setUseGroup(true);
+                                                   }}
+                                                   color="secondary"/>}
+                                  label="Using Group"/>
+                <Autocomplete
+                    style={{display: useGroup ? 'block' : 'none'}}
+                    freeSolo
+                    options={barkGroups}
+                    value={group}
+                    onChange={(event, newValue) => {
+                        setGroup(newValue ? newValue : "{{Title}}")
+                    }}
+                    renderInput={(params) => <TextField {...params} label="Group"/>}
+                />
                 <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
@@ -57,6 +88,12 @@ function Bark() {
                     formData.webhook = `https://${host}/${key}/{{Title}}/{{Message}}?copy={{Code}}&icon=${encodeURIComponent(icon)}`;
                     if (useRingtone) {
                         formData.webhook += `&sound=${ringtone}`;
+                    }
+                    if (useGroup) {
+                        formData.webhook += `&group=${group}`;
+                    }
+                    if (useTimeSensitive) {
+                        formData.webhook += `&level=timeSensitive`;
                     }
                     const Json = JSON.stringify(formData)
                     setValue(Json);
