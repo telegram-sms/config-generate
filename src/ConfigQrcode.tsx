@@ -24,7 +24,7 @@ interface FormData {
 
 const ConfigQrcode: React.FC = () => {
     const isNonMobile = useMediaQuery('(min-width:600px)');
-    let padding: any = "20px";
+    let padding: any = "0px";
     if (!isNonMobile) {
         padding = null;
     }
@@ -228,9 +228,9 @@ const ConfigQrcode: React.FC = () => {
                     maxWidth: "700px",
                     margin: "0 auto",
                     backgroundColor: theme.palette.configBox.main,
-                    borderRadius: "1em",
+                    borderRadius: "1rem",
                     boxSizing: "border-box",
-                    padding: "0 1em",
+                    padding: "0 1.25rem",
                     boxShadow: "rgba(0, 0, 0, .12) .25em .25em 1em .25em",
                     color: '#000',
                 }),
@@ -239,9 +239,9 @@ const ConfigQrcode: React.FC = () => {
                         maxWidth: "700px",
                         margin: "0 auto",
                         backgroundColor: theme.palette.configBox.dark,
-                        borderRadius: "1em",
+                        borderRadius: "1rem",
                         boxSizing: "border-box",
-                        padding: "0 1em",
+                        padding: "0 1.25rem",
                         boxShadow: "rgba(0, 0, 0, .12) .25em .25em 1em .25em",
                         color: '#fff',
                     }),
@@ -256,7 +256,7 @@ const ConfigQrcode: React.FC = () => {
                     <Box sx={{margin: "0", fontSize: "1.7em", fontWeight: 700}}>Telegram SMS Config Generator</Box>
                 </Box>
                 <Box component="section"
-                     sx={{paddingLeft: padding, paddingRight: padding, paddingBottom: "20px", paddingTop: "20px"}}>
+                     sx={{paddingLeft: padding, paddingRight: padding, paddingBottom: "1.25rem", paddingTop: "1.25rem"}}>
                     <form onSubmit={handleSubmit}>
                         <Box sx={{
                             display: "flex",

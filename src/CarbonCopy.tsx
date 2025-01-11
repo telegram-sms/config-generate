@@ -12,7 +12,7 @@ import PushDeer from "./carbon_copy/pushdeer";
 
 const CarbonCopy: React.FC = () => {
     const isNonMobile = useMediaQuery('(min-width:600px)');
-    let padding: any = "20px";
+    let padding: any = "0px";
     if (!isNonMobile) {
         padding = null;
     }
@@ -70,7 +70,7 @@ const CarbonCopy: React.FC = () => {
                 borderColor: 'divider',
                 paddingLeft: padding,
                 paddingRight: padding,
-                paddingBottom: "20px"
+                paddingBottom: "1.25rem"
             }}>
                 <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
                     <Tab label={tabLabels[0]} {...a11yProps(0)} />
