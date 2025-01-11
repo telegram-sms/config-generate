@@ -38,7 +38,7 @@ const theme = createTheme({
     },
     configBox: {
       main: '#fff',
-      dark: '#000',
+      dark: '#212121',
     },
   },
   components: {
@@ -47,7 +47,7 @@ const theme = createTheme({
           styleOverrides: {
             body: {
               // backgroundColor: "#5D576B",
-              backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 268 268' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.08' fill-rule='evenodd'%3E%3Ccircle cx='37' cy='37' r='36'/%3E%3Ccircle cx='171' cy='171' r='36'/%3E%3C/g%3E%3C/svg%3E")`,
+              backgroundImage: `url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 268 268' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04' fill-rule='evenodd'%3E%3Ccircle cx='37' cy='37' r='36'/%3E%3Ccircle cx='171' cy='171' r='36'/%3E%3C/g%3E%3C/svg%3E")`,
               backgroundAttachment: 'fixed',
             }
           }
