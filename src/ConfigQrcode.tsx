@@ -78,6 +78,13 @@ const ConfigQrcode: React.FC = () => {
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
         });
+        if(name === 'trusted_phone_number' && value.trim().length === 0){
+            setFormData({
+                ...formData,
+                fallback_sms: false,
+                trusted_phone_number: value,
+            });
+        }
         if (name === 'battery_monitoring_switch' && !checked) {
             setFormData({
                 ...formData,
@@ -280,6 +287,14 @@ const ConfigQrcode: React.FC = () => {
                             gap: 1,
                             margin: "1em 0"
                         }}>
+                            <FormControlLabel
+                                style={{display: formData.trusted_phone_number.trim().length!=0 ? 'block' : 'none'}}
+                                control={<Switch
+                                name="fallback_sms"
+                                checked={formData.fallback_sms}
+                                onChange={handleChange}
+                                color="secondary"/>}
+                                              label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel control={<Switch
                                 name="battery_monitoring_switch"
                                 checked={formData.battery_monitoring_switch}
@@ -300,12 +315,6 @@ const ConfigQrcode: React.FC = () => {
                                 onChange={handleChange}
                                 color="secondary"/>}
                                               label="Response to chat command"/>
-                            <FormControlLabel control={<Switch
-                                name="fallback_sms"
-                                checked={formData.fallback_sms}
-                                onChange={handleChange}
-                                color="secondary"/>}
-                                              label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel style={{display: groupMode ? 'block' : 'none'}}
                                               control={<Switch
                                                   name="privacy_mode"
