@@ -84,6 +84,7 @@ function Bark() {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
                     const formData = {
+                        name: "Bark",
                         method: 0,
                         webhook: "",
                         body: "",

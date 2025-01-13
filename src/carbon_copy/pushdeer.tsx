@@ -5,6 +5,7 @@ import {useQrious} from "react-qrious";
 function PushDeer() {
 
     const formData = {
+        name: "PushDeer",
         method: 1,
         webhook: "",
         body: "",

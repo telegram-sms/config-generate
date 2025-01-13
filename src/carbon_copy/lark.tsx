@@ -4,6 +4,7 @@ import {useQrious} from "react-qrious";
 
 function Lark() {
     const formData = {
+        name: "Lark",
             method: 1,
             webhook: "",
             body: "",
