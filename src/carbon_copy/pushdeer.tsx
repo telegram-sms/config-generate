@@ -39,7 +39,7 @@ function PushDeer() {
                     formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Message}}&type=markdown`;
                     setValue(JSON.stringify(formData));
                     console.log(formData);
-                }} variant="contained">Generate QR Code</Button>
+                }} variant="contained" color="warning">Generate QR Code</Button>
             </Box>
             <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
                 <Alert variant="filled" severity="info">

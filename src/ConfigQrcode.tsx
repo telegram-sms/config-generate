@@ -1,6 +1,8 @@
 
+// noinspection ExceptionCaughtLocallyJS
+
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, AlertTitle, Box, Button, FormControlLabel, Link, Switch, TextField, useMediaQuery} from "@mui/material";
+import {Alert, Box, Button, FormControlLabel, Link, Switch, TextField, useMediaQuery} from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
@@ -293,13 +295,13 @@ const ConfigQrcode: React.FC = () => {
                                 name="fallback_sms"
                                 checked={formData.fallback_sms}
                                 onChange={handleChange}
-                                color="secondary"/>}
+                                color="warning"/>}
                                               label="Forward SMS to trusted number when network unavailable"/>
                             <FormControlLabel control={<Switch
                                 name="battery_monitoring_switch"
                                 checked={formData.battery_monitoring_switch}
                                 onChange={handleChange}
-                                color="secondary"/>}
+                                color="warning"/>}
                                               label="Monitor battery level change"/>
                             <FormControlLabel
                                 style={{display: formData.battery_monitoring_switch ? 'block' : 'none'}}
@@ -307,27 +309,27 @@ const ConfigQrcode: React.FC = () => {
                                     name="charger_status"
                                     checked={formData.charger_status}
                                     onChange={handleChange}
-                                    color="secondary"/>}
+                                    color="warning"/>}
                                 label="Monitor charger status"/>
                             <FormControlLabel control={<Switch
                                 name="chat_command"
                                 checked={formData.chat_command}
                                 onChange={handleChange}
-                                color="secondary"/>}
+                                color="warning"/>}
                                               label="Response to chat command"/>
                             <FormControlLabel style={{display: groupMode ? 'block' : 'none'}}
                                               control={<Switch
                                                   name="privacy_mode"
                                                   checked={formData.privacy_mode}
                                                   onChange={handleChange}
-                                                  color="secondary"/>}
+                                                  color="warning"/>}
                                               label="Respond only to commands containing the Bot username"/>
                             <FormControlLabel
                                 control={<Switch
                                     name="verification_code"
                                     checked={formData.verification_code}
                                     onChange={handleChange}
-                                    color="secondary"/>}
+                                    color="warning"/>}
                                 label="Verification code automatic extraction (Alpha)"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
@@ -336,7 +338,7 @@ const ConfigQrcode: React.FC = () => {
                                 setInputOpen(true)
                             }} disabled={disableGenerateQRCode}
                                     variant="contained">Send configuration</Button>
-                            <Button type="submit" variant="contained" color="secondary"
+                            <Button type="submit" variant="contained" color="warning"
                                     disabled={disableGenerateQRCode}>Generate QR
                                 Code</Button>
                         </Box>

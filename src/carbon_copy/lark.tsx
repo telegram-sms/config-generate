@@ -50,7 +50,7 @@ function Lark() {
                     formData.body = JSON.stringify(body);
                     setValue(JSON.stringify(formData));
                     console.log(formData);
-                }} variant="contained">Generate QR Code</Button>
+                }} variant="contained" color="warning">Generate QR Code</Button>
             </Box>
             <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
                 <Alert variant="filled" severity="info">
