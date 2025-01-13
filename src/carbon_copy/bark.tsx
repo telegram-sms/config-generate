@@ -34,47 +34,52 @@ function Bark() {
                 <TextField type="text" value={icon} onChange={(event) => {
                     setIcon(event.target.value.trim());
                 }} label="Icon URL" variant="outlined" required/>
-                <FormControlLabel control={<Switch name="time_sensitive"
-                                                   checked={useTimeSensitive}
-                                                   onChange={() => {
-                                                       useTimeSensitive ? setTimeSensitive(false) : setTimeSensitive(true);
-                                                   }}
-                                                   color="secondary"/>}
-                                  label="Time Sensitive"/>
-                <FormControlLabel control={<Switch name="fallback_sms"
-                                                   checked={useRingtone}
-                                                   onChange={() => {
-                                                       useRingtone ? setUseRingtone(false) : setUseRingtone(true);
-                                                   }}
-                                                   color="secondary"/>}
-                                  label="Using RingTone"/>
-                <Autocomplete
-                    style={{display: useRingtone ? 'block' : 'none'}}
-                    freeSolo
-                    options={barkSounds}
-                    value={ringtone}
-                    onChange={(event, newValue) => {
-                        setRingtone(newValue ? newValue : "alarm")
-                    }}
-                    renderInput={(params) => <TextField {...params} label="Sounds"/>}
-                />
-                <FormControlLabel control={<Switch name="use_group"
-                                                   checked={useGroup}
-                                                   onChange={() => {
-                                                       useGroup ? setUseGroup(false) : setUseGroup(true);
-                                                   }}
-                                                   color="secondary"/>}
-                                  label="Using Group"/>
-                <Autocomplete
-                    style={{display: useGroup ? 'block' : 'none'}}
-                    freeSolo
-                    options={barkGroups}
-                    value={group}
-                    onChange={(event, newValue) => {
-                        setGroup(newValue ? newValue : "{{Title}}")
-                    }}
-                    renderInput={(params) => <TextField {...params} label="Group"/>}
-                />
+                <Box sx={{
+                    display: "flex",
+                    flexDirection: "column", gap: 1
+                }}>
+                    <FormControlLabel control={<Switch name="time_sensitive"
+                                                       checked={useTimeSensitive}
+                                                       onChange={() => {
+                                                           useTimeSensitive ? setTimeSensitive(false) : setTimeSensitive(true);
+                                                       }}
+                                                       color="warning"/>}
+                                      label="Time Sensitive"/>
+                    <FormControlLabel control={<Switch name="fallback_sms"
+                                                       checked={useRingtone}
+                                                       onChange={() => {
+                                                           useRingtone ? setUseRingtone(false) : setUseRingtone(true);
+                                                       }}
+                                                       color="warning"/>}
+                                      label="Using RingTone"/>
+                    <Autocomplete
+                        style={{display: useRingtone ? 'block' : 'none'}}
+                        freeSolo
+                        options={barkSounds}
+                        value={ringtone}
+                        onChange={(event, newValue) => {
+                            setRingtone(newValue ? newValue : "alarm")
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Sounds"/>}
+                    />
+                    <FormControlLabel control={<Switch name="use_group"
+                                                       checked={useGroup}
+                                                       onChange={() => {
+                                                           useGroup ? setUseGroup(false) : setUseGroup(true);
+                                                       }}
+                                                       color="warning"/>}
+                                      label="Using Group"/>
+                    <Autocomplete
+                        style={{display: useGroup ? 'block' : 'none'}}
+                        freeSolo
+                        options={barkGroups}
+                        value={group}
+                        onChange={(event, newValue) => {
+                            setGroup(newValue ? newValue : "{{Title}}")
+                        }}
+                        renderInput={(params) => <TextField {...params} label="Group"/>}
+                    />
+                </Box>
                 <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
