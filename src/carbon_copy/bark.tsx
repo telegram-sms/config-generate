@@ -83,23 +83,42 @@ function Bark() {
                 <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     const {host, key} = extractHostAndKey(server);
-                    const formData = {
+                    const formData: {
+                        name: string,
+                        enabled: boolean,
+                        har: HAR,
+                    } = {
                         name: "Bark",
-                        method: 0,
-                        webhook: "",
-                        body: "",
                         enabled: true,
-                        header: ""
+                        har: {
+                            log: {
+                                version: "1.2",
+                                entries: [{
+                                    request: {
+                                        method: "GET",
+                                        url: `https://${host}/${key}/{{Title}}/{{Message}}`,
+                                        httpVersion: "HTTP/1.1",
+                                        headers: [],
+                                        queryString: [{name: "copy", value: "{{Code}}"}, {
+                                            name: "icon",
+                                            value: icon
+                                        }],
+                                        cookies: [],
+                                        headersSize: -1,
+                                        bodySize: -1,
+                                    }
+                                }]
+                            }
+                        }
                     }
-                    formData.webhook = `https://${host}/${key}/{{Title}}/{{Message}}?copy={{Code}}&icon=${encodeURIComponent(icon)}`;
                     if (useRingtone) {
-                        formData.webhook += `&sound=${ringtone}`;
+                        formData.har.log.entries[0].request.queryString.push({name: "sound", value: ringtone});
                     }
                     if (useGroup) {
-                        formData.webhook += `&group=${group}`;
+                        formData.har.log.entries[0].request.queryString.push({name: "group", value: group});
                     }
                     if (useTimeSensitive) {
-                        formData.webhook += `&level=timeSensitive`;
+                        formData.har.log.entries[0].request.queryString.push({name: "level", value: "timeSensitive"});
                     }
                     const Json = JSON.stringify(formData)
                     setValue(Json);
