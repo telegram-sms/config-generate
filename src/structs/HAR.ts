@@ -30,7 +30,8 @@ interface Header {
 
 interface PostData {
     mimeType: string;
-    params: Param[];
+    params?: Param[];
+    text?: string;
 }
 
 interface Param {

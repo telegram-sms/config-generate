@@ -3,32 +3,6 @@ import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
 function Lark() {
-    const formData = {
-        name: "Lark",
-            method: 1,
-            webhook: "",
-            body: "",
-            enabled: true,
-            header: ""
-        };
-
-    const body = {
-        msg_type: "post",
-        content: {
-            "post": {
-                "en_us": {
-                    "title": "{{Title}}",
-                    "content": [
-                        [{
-                            "tag": "text",
-                            "text": "{{Message}}"
-                        }
-                        ]
-                    ]
-                }
-            }
-        }
-    };
 
     const [server, setServer] = useState("");
     const [value, setValue] = useState('');
@@ -47,8 +21,62 @@ function Lark() {
                            variant="outlined" required/>
                 <Button type="submit" disabled={server.trim()===""} onClick={(event) => {
                     event.preventDefault();
-                    formData.webhook = server;
-                    formData.body = JSON.stringify(body);
+/*                    formData.webhook = server;
+                    formData.body = JSON.stringify(body);*/
+                    const formData:{
+                        name: string,
+                        enabled: boolean,
+                        har: HAR
+                    } = {
+                        name: "Lark",
+                        enabled: true,
+                        har: {
+                            log: {
+                                version: "1.2",
+                                entries: [{
+                                    request: {
+                                        method: "POST",
+                                        url: server,
+                                        httpVersion: "HTTP/1.1",
+                                        headers: [
+                                            {
+                                                "name": "Content-Type",
+                                                "value": "application/json"
+                                            },
+                                            {
+                                                "name": "Accept",
+                                                "value": "application/json"
+                                            }
+                                        ],
+                                        queryString: [],
+                                        cookies: [],
+                                        headersSize: -1,
+                                        bodySize: -1,
+                                        postData:{
+                                            mimeType: "application/json",
+                                            text: JSON.stringify({
+                                                msg_type: "post",
+                                                content: {
+                                                    "post": {
+                                                        "en_us": {
+                                                            "title": "{{Title}}",
+                                                            "content": [
+                                                                [{
+                                                                    "tag": "text",
+                                                                    "text": "{{Message}}"
+                                                                }
+                                                                ]
+                                                            ]
+                                                        }
+                                                    }
+                                                }
+                                            })
+                                        }
+                                    }
+                                }]
+                            }
+                        }
+                    }
                     setValue(JSON.stringify(formData));
                     console.log(formData);
                 }} variant="contained" color="warning">Generate QR Code</Button>

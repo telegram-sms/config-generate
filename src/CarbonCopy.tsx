@@ -1,13 +1,10 @@
-
-
-
-
 import React, {useEffect, useState} from "react";
 import {Tab, Tabs, Box, useMediaQuery} from "@mui/material";
 import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
 import Lark from "./carbon_copy/lark";
 import PushDeer from "./carbon_copy/pushdeer";
+import Curl from "./carbon_copy/curl";
 
 
 const CarbonCopy: React.FC = () => {
@@ -16,7 +13,7 @@ const CarbonCopy: React.FC = () => {
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer"];
+    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer","Curl"];
 
     const [value, setValue] = useState(0);
 
@@ -76,6 +73,7 @@ const CarbonCopy: React.FC = () => {
                     <Tab label={tabLabels[0]} {...a11yProps(0)} />
                     <Tab label={tabLabels[1]} {...a11yProps(1)} />
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
+                    <Tab label={tabLabels[3]} {...a11yProps(3)} />
                 </Tabs>
                 <CustomTabPanel value={value} index={0}>
                     <Bark/>
@@ -85,6 +83,9 @@ const CarbonCopy: React.FC = () => {
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={2}>
                     <PushDeer/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={3}>
+                    <Curl />
                 </CustomTabPanel>
             </Box>
         </Box>

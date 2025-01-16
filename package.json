@@ -7,7 +7,8 @@
     "dev": "vite",
     "build": "tsc && vite build",
     "build:wasm": "cd wasm-rs && cargo build && wasm-pack build && npx shx cp pkg/* ../src/wasm",
-    "preview": "vite preview"
+    "preview": "vite preview",
+    "postinstall": "curl -O https://github.com/tree-sitter/tree-sitter-bash/releases/download/v0.23.3/tree-sitter-bash.wasm && npx shx mv tree-sitter-bash.wasm public/ && npx shx cp node_modules/web-tree-sitter/tree-sitter.wasm public"
   },
   "dependencies": {
     "@emotion/react": "latest",
@@ -15,6 +16,7 @@
     "@mui/icons-material": "latest",
     "@mui/material": "latest",
     "crypto-js": "^4.2.0",
+    "curlconverter": "^4.11.0",
     "qrious": "^4.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",

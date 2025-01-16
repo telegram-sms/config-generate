@@ -3,17 +3,6 @@ import React, {useState} from "react";
 import {useQrious} from "react-qrious";
 
 function PushDeer() {
-
-    const formData = {
-        name: "PushDeer",
-        method: 1,
-        webhook: "",
-        body: "",
-        enabled: true,
-        header: ""
-    };
-
-
     const [server, setServer] = useState("api2.pushdeer.com");
     const [key, setKey] = useState("");
     const [value, setValue] = useState('');
@@ -37,7 +26,31 @@ function PushDeer() {
                            variant="outlined" required/>
                 <Button type="submit" disabled={server.trim() === "" || key.trim() === ""} onClick={(event) => {
                     event.preventDefault();
-                    formData.webhook = `https://${server}/message/push?pushkey=${key}&text={{Title}}&desp={{Message}}&type=markdown`;
+                    const formData:{
+                        name: string,
+                        enabled: boolean,
+                        har: HAR
+                    } ={
+                        name: "PushDeer",
+                        enabled: true,
+                        har: {
+                            log: {
+                                version: "1.2",
+                                entries: [{
+                                    request: {
+                                        method: "GET",
+                                        url: `https://${server}/message/push`,
+                                        httpVersion: "HTTP/1.1",
+                                        headers: [],
+                                        queryString: [{name: "pushkey", value: key}, {name: "text", value: "{{Title}}"}, {name: "desp", value: "{{Message}}"}, {name: "type", value: "markdown"}],
+                                        cookies: [],
+                                        headersSize: -1,
+                                        bodySize: -1,
+                                    }         
+                                }]
+                            }
+                        }
+                    }
                     setValue(JSON.stringify(formData));
                     console.log(formData);
                 }} variant="contained" color="warning">Generate QR Code</Button>
