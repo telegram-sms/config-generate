@@ -1,6 +1,11 @@
 import {Alert, Autocomplete, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
 import React, {useState} from "react";
 import {useQrious} from "react-qrious";
+import ProgressDialog from "../components/ProgressDialog";
+import AlertDialog from "../components/AlertDialog";
+import InputDialog from "../components/InputDialog";
+import {encrypt} from "../wasm";
+import getHttpStatusMessage from "../constants/http";
 
 function Bark() {
     const [server, setServer] = useState("");
@@ -19,8 +24,107 @@ function Bark() {
     const [group, setGroup] = useState("{{Title}}");
     const [useTimeSensitive, setTimeSensitive] = useState(false);
 
+    const [inputOpen, setInputOpen] = useState(false);
+    const [progressOpen, setProgressOpen] = useState(false);
+    const [progressMessage, setProgressMessage] = useState("");
+
+    const [alertOpen, setAlertOpen] = useState(false);
+    const [alertMessage, setAlertMessage] = useState("");
+    const [alertTitle, setAlertTitle] = useState("");
+
+    async function handleSendConfig(password: string, fromData: any) {
+        const configJson = JSON.stringify(fromData);
+        const result = encrypt(configJson, password);
+        const data = {
+            encrypt: result
+        }
+        setProgressMessage("Transmitting, please wait...");
+        setProgressOpen(true);
+        try {
+            const response = await fetch('https://api.telegram-sms.com/cc-config', {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(data)
+            });
+            if (!response.ok) {
+                throw new Error('Network response: ' + getHttpStatusMessage(response.status));
+            }
+            return await response.json();
+        } catch (error: any) {
+            setAlertTitle("Error");
+            setAlertMessage(error.message);
+            setAlertOpen(true);
+        } finally {
+            setProgressOpen(false);
+        }
+    }
+
+
     return (
         <>
+            <ProgressDialog open={progressOpen} title="Loading" message={progressMessage}/>
+            <AlertDialog open={alertOpen} title={alertTitle} message={alertMessage}
+                         onClose={() => setAlertOpen(false)}/>
+            <InputDialog open={inputOpen} title="Please enter password" onClose={async (value) => {
+                setInputOpen(false);
+                // noinspection JSIgnoredPromiseFromCall
+                const {host, key} = extractHostAndKey(server);
+                const formData: {
+                    name: string,
+                    enabled: boolean,
+                    har: HAR,
+                } = {
+                    name: "Bark",
+                    enabled: true,
+                    har: {
+                        log: {
+                            version: "1.2",
+                            entries: [{
+                                request: {
+                                    method: "GET",
+                                    url: `https://${host}/${key}/{{Title}}/{{Message}}`,
+                                    httpVersion: "HTTP/1.1",
+                                    headers: [],
+                                    queryString: [{name: "copy", value: "{{Code}}"}, {
+                                        name: "icon",
+                                        value: icon
+                                    }],
+                                    cookies: [],
+                                    headersSize: -1,
+                                    bodySize: -1,
+                                }
+                            }]
+                        }
+                    }
+                }
+                if (useRingtone) {
+                    formData.har.log.entries[0].request.queryString.push({name: "sound", value: ringtone});
+                }
+                if (useGroup) {
+                    formData.har.log.entries[0].request.queryString.push({name: "group", value: group});
+                }
+                if (useTimeSensitive) {
+                    formData.har.log.entries[0].request.queryString.push({name: "level", value: "timeSensitive"});
+                }
+                const result = await handleSendConfig(value, formData);
+                if (result.key) {
+                    setAlertTitle("Send configuration")
+                    setAlertMessage(`Configuration sent successfully. \nID: ${result.key}`);
+                    setAlertOpen(true);
+                }
+            }} onVerify={
+                (value) => {
+                    if (value === "") {
+                        return {state: false, msg: "Password cannot be empty"};
+                    }
+                    if (value.length < 6) {
+                        return {state: false, msg: "Password length must be greater than 6"};
+                    }
+                    return {state: true, msg: ""};
+                }
+            } label="Password" type="password"></InputDialog>
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
