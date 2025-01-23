@@ -2,7 +2,17 @@
 // noinspection ExceptionCaughtLocallyJS
 
 import React, {useEffect, useRef, useState} from 'react';
-import {Alert, Box, Button, FormControlLabel, Link, Switch, TextField, useMediaQuery} from "@mui/material";
+import {
+    Alert,
+    alertTitleClasses,
+    Box,
+    Button,
+    FormControlLabel,
+    Link,
+    Switch,
+    TextField,
+    useMediaQuery
+} from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
@@ -47,7 +57,7 @@ const ConfigQrcode: React.FC = () => {
     });
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
-
+    const [alertTitle, setAlertTitle] = useState('');
     const [progressOpen, setProgressOpen] = useState(false);
     const [selectOpen, setSelectOpen] = useState(false);
     const [inputOpen, setInputOpen] = useState(false);
@@ -58,8 +68,6 @@ const ConfigQrcode: React.FC = () => {
     const chatIDRef = useRef<HTMLInputElement>(null);
     const [value, setValue] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
-    const [errorAlert, setErrorAlert] = useState(false);
-    const [error, setError] = useState('');
     const [disableGetChatId, setDisableGetChatId] = useState(true);
     const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(true);
     const [progressMessage, setProgressMessage] = useState("Please send some messages to the bot...");
@@ -110,8 +118,9 @@ const ConfigQrcode: React.FC = () => {
             }
             const data = await response.json();
             if (data.result.length === 0) {
-                setError('No recent chat ID found');
-                setErrorAlert(true);
+                setAlertTitle("Error");
+                setAlertMessage('No recent chat ID found');
+                setAlertOpen(true);
                 return;
             }
             const {chatNameList, chatIdList, chatThreadIdList} = fetchChatList(data);
@@ -120,12 +129,13 @@ const ConfigQrcode: React.FC = () => {
             setLists(chatNameList);
             setSelectOpen(true);
         } catch (error: any) {
-            setError(error.message);
-            setErrorAlert(true);
+            setAlertTitle("Error");
+            setAlertMessage(error.message);
+            setAlertOpen(true);
         } finally {
             setProgressOpen(false);
             setTimeout(() => {
-                setErrorAlert(false);
+                setAlertOpen(false);
             }, 5000);
         }
     };
@@ -180,8 +190,9 @@ const ConfigQrcode: React.FC = () => {
             }
             return await response.json();
         } catch (error: any) {
-            setError(error.message);
-            setErrorAlert(true);
+            setAlertTitle("Error");
+            setAlertMessage(error.message);
+            setAlertOpen(true);
         } finally {
             setProgressOpen(false);
         }
@@ -196,6 +207,7 @@ const ConfigQrcode: React.FC = () => {
                 if (value !== "") {
                     const result = await handleSendConfig(value);
                     if (result.key) {
+                        setAlertTitle("Send configuration")
                         setAlertMessage(`Configuration sent successfully. \nID: ${result.key}`);
                         setAlertOpen(true);
                     }
@@ -211,10 +223,8 @@ const ConfigQrcode: React.FC = () => {
                     return {state: true, msg: ""};
                 }
             } label="Password" type="password"></InputDialog>
-            <AlertDialog open={alertOpen} title="Send configuration" message={alertMessage}
+            <AlertDialog open={alertOpen} title={alertTitle} message={alertMessage}
                          onClose={() => setAlertOpen(false)}/>
-            <AlertDialog open={errorAlert} title="Error" message={error}
-                         onClose={() => setErrorAlert(false)}/>
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
