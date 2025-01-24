@@ -1,5 +1,5 @@
 import {Alert, Autocomplete, Box, Button, FormControlLabel, Switch, TextField} from "@mui/material";
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
@@ -31,8 +31,17 @@ function Bark() {
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState("");
     const [alertTitle, setAlertTitle] = useState("");
+    const [errorMessage, setErrorMessage] = useState('');
+
+
+    useEffect(() => {
+        setErrorMessage("")
+    }, [server]);
 
     async function handleSendConfig(password: string, fromData: any) {
+        if(!fromData) {
+            return;
+        }
         const configJson = JSON.stringify(fromData);
         const result = encrypt(configJson, password);
         const data = {
@@ -49,6 +58,7 @@ function Bark() {
                 body: JSON.stringify(data)
             });
             if (!response.ok) {
+                // noinspection ExceptionCaughtLocallyJS
                 throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
             return await response.json();
@@ -60,7 +70,52 @@ function Bark() {
             setProgressOpen(false);
         }
     }
-
+    function getFormData() {
+        try {
+            const {host, key} = extractHostAndKey(server);
+            const formData: {
+                name: string,
+                enabled: boolean,
+                har: HAR,
+            } = {
+                name: "Bark",
+                enabled: true,
+                har: {
+                    log: {
+                        version: "1.2",
+                        entries: [{
+                            request: {
+                                method: "GET",
+                                url: `https://${host}/${key}/{{Title}}/{{Message}}`,
+                                httpVersion: "HTTP/1.1",
+                                headers: [],
+                                queryString: [{name: "copy", value: "{{Code}}"}, {
+                                    name: "icon",
+                                    value: icon
+                                }],
+                                cookies: [],
+                                headersSize: -1,
+                                bodySize: -1,
+                            }
+                        }]
+                    }
+                }
+            }
+            if (useRingtone) {
+                formData.har.log.entries[0].request.queryString.push({name: "sound", value: ringtone});
+            }
+            if (useGroup) {
+                formData.har.log.entries[0].request.queryString.push({name: "group", value: group});
+            }
+            if (useTimeSensitive) {
+                formData.har.log.entries[0].request.queryString.push({name: "level", value: "timeSensitive"});
+            }
+            return formData;
+        }catch (e: any) {
+            setErrorMessage(e.message);
+            console.error(e);
+        }
+    }
 
     return (
         <>
@@ -69,46 +124,7 @@ function Bark() {
                          onClose={() => setAlertOpen(false)}/>
             <InputDialog open={inputOpen} title="Please enter password" onClose={async (value) => {
                 setInputOpen(false);
-                // noinspection JSIgnoredPromiseFromCall
-                const {host, key} = extractHostAndKey(server);
-                const formData: {
-                    name: string,
-                    enabled: boolean,
-                    har: HAR,
-                } = {
-                    name: "Bark",
-                    enabled: true,
-                    har: {
-                        log: {
-                            version: "1.2",
-                            entries: [{
-                                request: {
-                                    method: "GET",
-                                    url: `https://${host}/${key}/{{Title}}/{{Message}}`,
-                                    httpVersion: "HTTP/1.1",
-                                    headers: [],
-                                    queryString: [{name: "copy", value: "{{Code}}"}, {
-                                        name: "icon",
-                                        value: icon
-                                    }],
-                                    cookies: [],
-                                    headersSize: -1,
-                                    bodySize: -1,
-                                }
-                            }]
-                        }
-                    }
-                }
-                if (useRingtone) {
-                    formData.har.log.entries[0].request.queryString.push({name: "sound", value: ringtone});
-                }
-                if (useGroup) {
-                    formData.har.log.entries[0].request.queryString.push({name: "group", value: group});
-                }
-                if (useTimeSensitive) {
-                    formData.har.log.entries[0].request.queryString.push({name: "level", value: "timeSensitive"});
-                }
-                const result = await handleSendConfig(value, formData);
+                const result = await handleSendConfig(value, getFormData());
                 if (result.key) {
                     setAlertTitle("Send configuration")
                     setAlertMessage(`Configuration sent successfully. \nID: ${result.key}`);
@@ -134,6 +150,8 @@ function Bark() {
                            value={server} onChange={(event) => {
                     setServer(event.target.value.trim());
                 }} label="Webhook URL"
+                           error={errorMessage !== ''}
+                           helperText={errorMessage}
                            variant="outlined" required/>
                 <TextField type="text" value={icon} onChange={(event) => {
                     setIcon(event.target.value.trim());
@@ -184,48 +202,23 @@ function Bark() {
                         renderInput={(params) => <TextField {...params} label="Group"/>}
                     />
                 </Box>
+                <Button type="button" onClick={() => {
+                    setInputOpen(true)
+                }} disabled={server.trim() === ""}
+                        variant="contained">Send configuration</Button>
                 <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
-                    const {host, key} = extractHostAndKey(server);
-                    const formData: {
-                        name: string,
-                        enabled: boolean,
-                        har: HAR,
-                    } = {
-                        name: "Bark",
-                        enabled: true,
-                        har: {
-                            log: {
-                                version: "1.2",
-                                entries: [{
-                                    request: {
-                                        method: "GET",
-                                        url: `https://${host}/${key}/{{Title}}/{{Message}}`,
-                                        httpVersion: "HTTP/1.1",
-                                        headers: [],
-                                        queryString: [{name: "copy", value: "{{Code}}"}, {
-                                            name: "icon",
-                                            value: icon
-                                        }],
-                                        cookies: [],
-                                        headersSize: -1,
-                                        bodySize: -1,
-                                    }
-                                }]
-                            }
-                        }
+                    try {
+                        const Json = JSON.stringify(getFormData());
+                        setValue(Json);
+                    }catch (e: any) {
+                        setAlertTitle("Error");
+                        setAlertMessage(e.message);
+                        setAlertOpen(true);
+                        console.error(e);
                     }
-                    if (useRingtone) {
-                        formData.har.log.entries[0].request.queryString.push({name: "sound", value: ringtone});
-                    }
-                    if (useGroup) {
-                        formData.har.log.entries[0].request.queryString.push({name: "group", value: group});
-                    }
-                    if (useTimeSensitive) {
-                        formData.har.log.entries[0].request.queryString.push({name: "level", value: "timeSensitive"});
-                    }
-                    const Json = JSON.stringify(formData)
-                    setValue(Json);
+
+
                 }} variant="contained" color="warning">Generate QR Code</Button>
             </Box>
             <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>

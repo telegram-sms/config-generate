@@ -42,6 +42,7 @@ function Lark() {
                 body: JSON.stringify(data)
             });
             if (!response.ok) {
+                // noinspection ExceptionCaughtLocallyJS
                 throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
             return await response.json();
