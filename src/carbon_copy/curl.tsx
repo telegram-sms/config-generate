@@ -54,6 +54,18 @@ function Lark() {
             setProgressOpen(false);
         }
     }
+    function getFormData() {
+        const formData: {
+            name: string,
+            enabled: boolean,
+            har: HAR
+        } = {
+            name: "Curl",
+            enabled: true,
+            har: JSON.parse(curlconverter.toHarString(server))
+        }
+        return formData;
+    }
 
     return (
         <>
@@ -64,16 +76,7 @@ function Lark() {
                 setInputOpen(false);
                 // noinspection JSIgnoredPromiseFromCall
                 if (value !== "") {
-                    const formData: {
-                        name: string,
-                        enabled: boolean,
-                        har: HAR
-                    } = {
-                        name: "Curl",
-                        enabled: true,
-                        har: JSON.parse(curlconverter.toHarString(server))
-                    }
-                    const result = await handleSendConfig(value, formData);
+                    const result = await handleSendConfig(value, getFormData());
                     if (result.key) {
                         setAlertTitle("Send configuration")
                         setAlertMessage(`Configuration sent successfully. \nID: ${result.key}`);
@@ -119,15 +122,7 @@ function Lark() {
                 <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     try {
-                        const formData: {
-                            name: string,
-                            enabled: boolean,
-                            har: HAR
-                        } = {
-                            name: "Curl",
-                            enabled: true,
-                            har: JSON.parse(curlconverter.toHarString(server))
-                        }
+                        const formData = getFormData();
                         setValue(JSON.stringify(formData));
                         console.log(formData);
                     } catch (e: any) {
