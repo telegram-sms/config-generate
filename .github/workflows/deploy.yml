@@ -33,7 +33,9 @@ jobs:
           npm install -g netlify-cli
 
       - name: Build project
-        run: npm run build
+        run: |
+          npm run postinstall
+          npm run build
 
       - name: Deploy to Netlify
         env:
