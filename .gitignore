@@ -25,4 +25,3 @@ dist-ssr
 !/vite.config.ts
 /wasm-rs/target/
 /src/wasm/
-*.wasm

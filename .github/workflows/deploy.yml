@@ -34,7 +34,6 @@ jobs:
 
       - name: Build project
         run: |
-          npm run postinstall
           npm run build
 
       - name: Deploy to Netlify
