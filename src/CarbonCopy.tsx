@@ -19,9 +19,8 @@ const CarbonCopy: React.FC = () => {
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
-        document.title = `${tabLabels[value]} - Carbon Copy Config Generator - Telegram SMS`;
     };
-
+    document.title = `Carbon Copy Config Generator - Telegram SMS`;
     const a11yProps = (index: number) => {
         return {
             id: `simple-tab-${index}`,
