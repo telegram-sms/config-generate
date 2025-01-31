@@ -17,6 +17,7 @@
     "@mui/material": "latest",
     "crypto-js": "^4.2.0",
     "curlconverter": "^4.11.0",
+    "netlify-cli": "^18.0.3",
     "qrious": "^4.0.2",
     "react": "18.3.1",
     "react-dom": "18.3.1",
