@@ -13,7 +13,7 @@ const CarbonCopy: React.FC = () => {
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer","Curl"];
+    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer", "Curl"];
 
     const [value, setValue] = useState(0);
 
@@ -84,7 +84,7 @@ const CarbonCopy: React.FC = () => {
                     <PushDeer/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
-                    <Curl />
+                    <Curl/>
                 </CustomTabPanel>
             </Box>
         </Box>
