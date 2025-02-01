@@ -68,7 +68,10 @@ const CarbonCopy: React.FC = () => {
                 paddingRight: padding,
                 paddingBottom: "1.25rem"
             }}>
-                <Tabs value={value} onChange={handleChange} aria-label="basic tabs example">
+                <Tabs value={value} onChange={handleChange}
+                      variant="scrollable"
+                      scrollButtons="auto"
+                      aria-label="basic tabs example">
                     <Tab label={tabLabels[0]} {...a11yProps(0)} />
                     <Tab label={tabLabels[1]} {...a11yProps(1)} />
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
