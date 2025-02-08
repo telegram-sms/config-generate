@@ -4,6 +4,7 @@ import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
 import Lark from "./carbon_copy/lark";
 import PushDeer from "./carbon_copy/pushdeer";
+import Gotify from "./carbon_copy/gotify";
 import Curl from "./carbon_copy/curl";
 
 
@@ -13,7 +14,7 @@ const CarbonCopy: React.FC = () => {
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer", "Curl"];
+    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer", "Gotify" ,"Curl"];
 
     const [value, setValue] = useState(0);
 
@@ -76,6 +77,7 @@ const CarbonCopy: React.FC = () => {
                     <Tab label={tabLabels[1]} {...a11yProps(1)} />
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
                     <Tab label={tabLabels[3]} {...a11yProps(3)} />
+                    <Tab label={tabLabels[4]} {...a11yProps(4)} />
                 </Tabs>
                 <CustomTabPanel value={value} index={0}>
                     <Bark/>
@@ -87,6 +89,9 @@ const CarbonCopy: React.FC = () => {
                     <PushDeer/>
                 </CustomTabPanel>
                 <CustomTabPanel value={value} index={3}>
+                    <Gotify/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={4}>
                     <Curl/>
                 </CustomTabPanel>
             </Box>
