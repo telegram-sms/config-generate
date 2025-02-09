@@ -1,4 +1,5 @@
-import {Alert, Box, Button, Link, TextField} from "@mui/material";
+import {Alert, Box, Button, IconButton, Link, TextField} from "@mui/material";
+import ContentCopyIcon from '@mui/icons-material/ContentCopy';
 import React, {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import {encrypt} from "../wasm/wasm_rs";
@@ -106,6 +107,19 @@ function Gotify() {
         }
     }
 
+    const copyToClipboard = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            setAlertTitle("Success");
+            setAlertMessage("Data copied to clipboard");
+            setAlertOpen(true);
+        } catch (err) {
+            setAlertTitle("Error");
+            setAlertMessage("Failed to copy data");
+            setAlertOpen(true);
+        }
+    };
+
     return (
         <>
             <ProgressDialog open={progressOpen} title="Loading" message={progressMessage}/>
@@ -185,16 +199,54 @@ function Gotify() {
                 </Alert>
             </Box>
             <Box sx={{
-                display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
-                justifyContent: "center", backgroundColor: "#fff",
+                display: value ? 'flex' : 'none', 
+                marginTop: 2, 
+                alignItems: "center",
+                justifyContent: "center", 
+                // backgroundColor: "#fff",
                 padding: "1em",
             }}>
                 <img src={qrCode} alt="QR Code" style={{
                     maxWidth: '100%', height: 'auto'
                 }}/>
             </Box>
+            <Box sx={{
+                display: value ? 'flex' : 'none',
+                flexDirection: 'column',
+                marginTop: 2,
+                padding: "1em",
+                borderRadius: "4px",
+            }}>
+                <Box sx={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    marginBottom: 1
+                }}>
+                    <h3 style={{ margin: 0 }}>HAR Data</h3>
+                    <IconButton 
+                        onClick={() => copyToClipboard(value)}
+                        color="primary"
+                        aria-label="copy to clipboard"
+                    >
+                        <ContentCopyIcon />
+                    </IconButton>
+                </Box>
+                <Box sx={{
+                    padding: '1em',
+                    borderRadius: '4px',
+                    maxHeight: '300px',
+                    overflow: 'auto',
+                    // fontFamily: 'monospace',
+                    whiteSpace: 'pre-wrap',
+                    wordBreak: 'break-all'
+                }}>
+                    {value && JSON.stringify(JSON.parse(value), null, 2)}
+                </Box>
+            </Box>
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>
+                <p>Server URL format is https://example.com/message</p>
                 <p>In the request URL, Body, the following keywords can be used. The system will automatically replace
                     these keywords based on the template you provide.</p>
                 <ul>
