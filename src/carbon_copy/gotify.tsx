@@ -90,7 +90,7 @@ function Gotify() {
                                     "bodySize": -1,
                                     "postData": {
                                         "mimeType": "application/json",
-                                        "text": `{\"message\": \"{{MESSAGE}}\", \"title\": \"{{Title}}\", \"priority\":\"${priority}\", \"extras\": {\"client::display\": {\"contentType\": \"text/markdown\"}}}`
+                                        "text": `{\"message\": \"{{Message}}\", \"title\": \"{{Title}}\", \"priority\":${priority}, \"extras\": {\"client::display\": {\"contentType\": \"text/markdown\"}}}`
                                     }
                                 }
                             }
@@ -201,6 +201,13 @@ function Gotify() {
                     <li>{"{{Title}}: The title of the message"}</li>
                     <li>{"{{Message}}: The content of the message"}</li>
                     <li>{"{{Code}}: The Verification code of the message"}</li>
+                </ul>
+                <p>For <a href="https://github.com/gotify/android?tab=readme-ov-file#message-priorities" target="_blank" rel="noopener">Notification Priority</a>, the reference values are listed below (default level is 5):</p>
+                <ul>
+                    <li>0: No notification</li>
+                    <li>1-3: Icon in notification bar</li>
+                    <li>4-7: Icon in notification bar + Sound</li>
+                    <li>8-10: Icon in notification bar + Sound + Vibration</li>
                 </ul>
             </Box>
         </>
