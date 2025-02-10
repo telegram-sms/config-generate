@@ -137,7 +137,7 @@ function PushDeer() {
                     const formData = getFormData();
                     setValue(JSON.stringify(formData));
                     console.log(formData);
-                }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
+                }} variant="contained" color="warning">Generate QR Code</Button>
             </Box>
             <DataDisplay value={value}/>
         </>

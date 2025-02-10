@@ -194,12 +194,12 @@ function Template () {
                     variant="contained"
                     color="warning"
                 >
-                    Generate QR Code/ HAR Config
+                    Generate QR Code
                 </Button>
             </Box>
 
             {/* Data Display, including QR Code and HAR Config */}
-            <DataDisplay value={value} />
+            <DataDisplay value={value} debug={true} />
 
             {/* Comments */}
             <Box component="section" sx={{ paddingBottom: "20px" }}>
