@@ -15,12 +15,14 @@ import {
 import MenuIcon from '@mui/icons-material/Menu';
 import Home from '@mui/icons-material/Home';
 import MailIcon from '@mui/icons-material/Mail';
+import GitHubIcon from '@mui/icons-material/GitHub';
 import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
 import ConfigQrcode from "./ConfigQrcode";
 import CarbonCopy from "./CarbonCopy";
 import * as React from "react";
 
 function NavBar() {
+    const { gitHubRepository = 'https://github.com/telegram-sms/config-generate' } = {};
     const [open, setOpen] = React.useState(false);
     const navigate = useNavigate();
 
@@ -67,6 +69,19 @@ function NavBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         Telegram SMS
                     </Typography>
+                    {/* // Add Github Repo to the right side of the AppBar */}
+                    <IconButton
+                        size="large"
+                        edge="end"
+                        color="inherit"
+                        aria-label="menu"
+                        href={gitHubRepository}
+                        target="_blank"
+                        rel="noopener"
+                        sx={{ ml: 2 }}
+                    >
+                        <GitHubIcon />
+                    </IconButton>
                 </Toolbar>
             </AppBar>
             <Drawer open={open} onClose={toggleDrawer(false)}>
