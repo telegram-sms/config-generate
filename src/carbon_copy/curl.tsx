@@ -136,7 +136,7 @@ function Curl() {
                 }} variant="contained" color="warning">Generate QR Code / HAR Config</Button>
             </Box>
             {/* Data Display, including QR Code and HAR Config */}
-            <DataDisplay value={value}/>
+            <DataDisplay value={value} debug={true}/>
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>
                 <p>In the request URL, Body, the following keywords can be used. The system will automatically replace

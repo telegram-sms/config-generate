@@ -1,4 +1,4 @@
-# 如何新增一个 Carbon Copy Provider
+# 如何新增一个 Carbon Copy 提供商
 
 > If you need the English version of this tutorial, please refer to [here](./CarbonCopyProvider.md)
 
@@ -8,6 +8,20 @@
 项目中已有一些 Carbon Copy Providers 的示例。您可以在 `src/providers` 目录下找到 `template.tsx`。实现一个新 Carbon Copy Provider 主要包括两个部分：
 1. 实现 Provider 配置项。
 2. 实现 Provider 的请求 HAR。
+
+## 数据展示调试模式
+要启用数据展示调试模式，需要在 `src/carbon_copy/template.tsx` 文件中将 `debug` 变量设置为 `true`：
+
+```tsx
+<DataDisplay value={value} debug={true}/>
+```
+
+当 `debug` 变量被设置为 `true` 时，数据展示会显示发送给 Provider 的 HAR 数据，这对于调试非常有帮助。
+
+由于 `cURL` 转换经常用于调试，HAR 数据总会显示在数据展示中。若要在其他 Providers 中查看 HAR 数据，则需将 `debug` 变量设置为 `true`。
+
+为了尽量减少用户端的显示内容，请在提交代码前将 `debug` 设置回 `false`。
+
 
 ## 实现 Provider 配置项
 Provider 配置项是用户在 Carbon Copy Provider 中需要提供的配置，用于根据 Provider 的 API 生成请求 HAR，并在界面中展示给用户填写。
@@ -202,4 +216,3 @@ function extractHostAndKey(url: string) {
     {/* <CustomTabPanel value={value} index={5}>
         <Template/>
     </CustomTabPanel> */}
-```

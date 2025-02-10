@@ -11,6 +11,22 @@ There are two main parts to implement a new Carbon Copy Provider:
 1. Implement the provider options.
 2. Implement the provider request HAR.
 
+## Data Display Debug Mode
+
+To enable the data display debug mode, you need to set the `debug` variable to `true` in the `src/carbon_copy/template.tsx` file.
+
+```tsx
+<DataDisplay value={value} debug={true}/>
+```
+
+If the `debug` variable is set to `true`, the data display will show the HAR data that is being sent to the provider. This is useful for debugging the provider.
+
+Since cURL generation is debugging, HAR data is always displayed in the data display. If you want to see the HAR data for other providers, you need to set the `debug` variable to `true`.
+
+To minimize the data display to users, you should set the `debug` variable to `false` before committing the code.
+
+```tsx 
+
 ## Implement the provider options
 The provider options are the configuration that the user needs to provide to the Carbon Copy Provider. They are used to generate the request HAR according to the provider's API. It is also shown in the user interface for the user to fill in.
 

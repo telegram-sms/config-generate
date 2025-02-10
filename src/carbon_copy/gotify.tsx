@@ -186,7 +186,7 @@ function Gotify() {
                         console.error(e);
                         setErrorMessage(e.message);
                     }
-                }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
+                }} variant="contained" color="warning">Generate QR Code</Button>
             </Box>
 
             {/* Data Display, including QR Code and HAR Config */}
