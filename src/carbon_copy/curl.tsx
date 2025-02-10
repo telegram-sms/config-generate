@@ -1,4 +1,4 @@
-import {Alert, Box, Button, Link, TextField} from "@mui/material";
+import {Alert, Box, Button, IconButton, Link, TextField} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import * as curlconverter from "curlconverter";
@@ -7,8 +7,9 @@ import getHttpStatusMessage from "../constants/http";
 import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
+import DataDisplay from "../components/DataDisplay";
 
-function Lark() {
+function Curl() {
 
     const [server, setServer] = useState("");
     const [value, setValue] = useState('');
@@ -66,7 +67,6 @@ function Lark() {
         }
         return formData;
     }
-
     return (
         <>
             <ProgressDialog open={progressOpen} title="Loading" message={progressMessage}/>
@@ -129,22 +129,9 @@ function Lark() {
                         console.error(e);
                         setErrorMessage(e.message);
                     }
-                }} variant="contained" color="warning">Generate QR Code</Button>
+                }} variant="contained" color="warning">Generate QR Code / HAR Config</Button>
             </Box>
-            <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
-                <Alert variant="filled" severity="info">
-                    our generated QR Code will be displayed here
-                </Alert>
-            </Box>
-            <Box sx={{
-                display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
-                justifyContent: "center", backgroundColor: "#fff",
-                padding: "1em",
-            }}>
-                <img src={qrCode} alt="QR Code" style={{
-                    maxWidth: '100%', height: 'auto'
-                }}/>
-            </Box>
+            <DataDisplay value={value}/>
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>
                 <p>In the request URL, Body, the following keywords can be used. The system will automatically replace
@@ -159,4 +146,4 @@ function Lark() {
     );
 }
 
-export default Lark;
+export default Curl;

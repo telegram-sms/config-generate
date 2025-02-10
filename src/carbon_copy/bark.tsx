@@ -6,6 +6,7 @@ import AlertDialog from "../components/AlertDialog";
 import InputDialog from "../components/InputDialog";
 import {encrypt} from "../wasm";
 import getHttpStatusMessage from "../constants/http";
+import DataDisplay from "../components/DataDisplay";
 
 function Bark() {
     const [server, setServer] = useState("");
@@ -219,22 +220,10 @@ function Bark() {
                     }
 
 
-                }} variant="contained" color="warning">Generate QR Code</Button>
+                }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
             </Box>
-            <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
-                <Alert variant="filled" severity="info">
-                    Your generated QR Code will be displayed here
-                </Alert>
-            </Box>
-            <Box sx={{
-                display: value ? 'flex' : 'none', marginTop: 2, alignItems: "center",
-                justifyContent: "center", backgroundColor: "#fff",
-                padding: "1em",
-            }}>
-                <img src={qrCode} alt="QR Code" style={{
-                    maxWidth: '100%', height: 'auto'
-                }}/>
-            </Box>
+            <DataDisplay value={value}/>
+
         </>
     );
 }

@@ -7,6 +7,9 @@ import getHttpStatusMessage from "../constants/http";
 import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
+import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
+import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
+import DataDisplay from "../components/DataDisplay";
 
 function Gotify() {
 
@@ -191,59 +194,9 @@ function Gotify() {
                         console.error(e);
                         setErrorMessage(e.message);
                     }
-                }} variant="contained" color="warning">Generate QR Code</Button>
+                }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
             </Box>
-            <Box sx={{display: value ? 'none' : 'block', marginTop: 2}}>
-                <Alert variant="filled" severity="info">
-                    Your generated QR Code will be displayed here
-                </Alert>
-            </Box>
-            <Box sx={{
-                display: value ? 'flex' : 'none', 
-                marginTop: 2, 
-                alignItems: "center",
-                justifyContent: "center", 
-                // backgroundColor: "#fff",
-                padding: "1em",
-            }}>
-                <img src={qrCode} alt="QR Code" style={{
-                    maxWidth: '100%', height: 'auto'
-                }}/>
-            </Box>
-            <Box sx={{
-                display: value ? 'flex' : 'none',
-                flexDirection: 'column',
-                marginTop: 2,
-                padding: "1em",
-                borderRadius: "4px",
-            }}>
-                <Box sx={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    marginBottom: 1
-                }}>
-                    <h3 style={{ margin: 0 }}>HAR Data</h3>
-                    <IconButton 
-                        onClick={() => copyToClipboard(value)}
-                        color="primary"
-                        aria-label="copy to clipboard"
-                    >
-                        <ContentCopyIcon />
-                    </IconButton>
-                </Box>
-                <Box sx={{
-                    padding: '1em',
-                    borderRadius: '4px',
-                    maxHeight: '300px',
-                    overflow: 'auto',
-                    // fontFamily: 'monospace',
-                    whiteSpace: 'pre-wrap',
-                    wordBreak: 'break-all'
-                }}>
-                    {value && JSON.stringify(JSON.parse(value), null, 2)}
-                </Box>
-            </Box>
+            <DataDisplay value={value}/>
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>
                 <p>Server URL format is https://example.com/message</p>
