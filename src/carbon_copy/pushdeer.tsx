@@ -9,8 +9,13 @@ import InputDialog from "../components/InputDialog";
 import DataDisplay from "../components/DataDisplay";
 
 function PushDeer() {
-    const [server, setServer] = useState("api2.pushdeer.com");
-    const [key, setKey] = useState("");
+    // State Carbon Copy Provider Options
+
+    const [server, setServer] = useState("api2.pushdeer.com"); // Webhook URL
+    const [key, setKey] = useState(""); // Pushkey
+
+    // Provider Options Ends here
+
     const [value, setValue] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
 

@@ -10,8 +10,12 @@ import AlertDialog from "../components/AlertDialog";
 import DataDisplay from "../components/DataDisplay";
 
 function Curl() {
+    // State Carbon Copy Provider Options
 
-    const [server, setServer] = useState("");
+    const [curlCommand, setcurlCommand] = useState(""); // Curl Command
+
+    // Provider Options Ends here
+
     const [value, setValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
@@ -24,7 +28,7 @@ function Curl() {
     const [alertTitle, setAlertTitle] = useState("");
     useEffect(() => {
         setErrorMessage("")
-    }, [server]);
+    }, [curlCommand]);
 
     async function handleSendConfig(password: string, fromData: any) {
         const configJson = JSON.stringify(fromData);
@@ -63,7 +67,7 @@ function Curl() {
         } = {
             name: "Curl",
             enabled: true,
-            har: JSON.parse(curlconverter.toHarString(server))
+            har: JSON.parse(curlconverter.toHarString(curlCommand))
         }
         return formData;
     }
@@ -101,8 +105,8 @@ function Curl() {
                 gap: 2
             }}>
                 <TextField type="text"
-                           value={server} onChange={(event) => {
-                    setServer(event.target.value);
+                           value={curlCommand} onChange={(event) => {
+                    setcurlCommand(event.target.value);
                 }} label="Curl Command"
                            error={errorMessage !== ''}
                            helperText={errorMessage}
@@ -110,16 +114,16 @@ function Curl() {
                            maxRows={4} required/>
                 <Button type="button" onClick={() => {
                     try {
-                        curlconverter.toHarString(server)
+                        curlconverter.toHarString(curlCommand)
                     } catch (e: any) {
                         console.error(e);
                         setErrorMessage(e.message);
                         return;
                     }
                     setInputOpen(true)
-                }} disabled={server.trim() === ""}
+                }} disabled={curlCommand.trim() === ""}
                         variant="contained">Send configuration</Button>
-                <Button type="submit" disabled={server.trim() === ""} onClick={(event) => {
+                <Button type="submit" disabled={curlCommand.trim() === ""} onClick={(event) => {
                     event.preventDefault();
                     try {
                         const formData = getFormData();
@@ -131,6 +135,7 @@ function Curl() {
                     }
                 }} variant="contained" color="warning">Generate QR Code / HAR Config</Button>
             </Box>
+            {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value}/>
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>

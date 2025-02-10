@@ -9,21 +9,26 @@ import getHttpStatusMessage from "../constants/http";
 import DataDisplay from "../components/DataDisplay";
 
 function Bark() {
-    const [server, setServer] = useState("");
-    const [icon, setIcon] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4");
-    const [value, setValue] = useState("");
-    const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
+    // State Carbon Copy Provider Options
+    
+    const [server, setServer] = useState(""); // Webhook URL
+    const [icon, setIcon] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4"); // Icon URL
     const barkSounds = [
         "alarm", "anticipate", "bell", "birdsong", "bloom", "calypso", "chime", "choo", "descent", "electronic", "fanfare", "gathering", "glass", "gotosleep", "healthnotification", "horn", "ladder", "mailsent", "minuet", "multiwayinvitation", "newmail", "newsflash", "noir", "paymentsuccess", "shake", "sherwoodforest", "silence", "spell", "suspense", "telegraph", "tiptoes", "typewriters", "update", "uplift", "voicemail"
-    ];
-    const [useRingtone, setUseRingtone] = useState(false);
-    const [ringtone, setRingtone] = useState("alarm");
+    ]; // Bark Sounds Preset
+    const [useRingtone, setUseRingtone] = useState(false); // Ringtone Toggle
+    const [ringtone, setRingtone] = useState("alarm"); // Ringtone
     const barkGroups = [
         "{{Title}}", "Telegram SMS", "Home", "Work"
-    ];
-    const [useGroup, setUseGroup] = useState(false);
-    const [group, setGroup] = useState("{{Title}}");
-    const [useTimeSensitive, setTimeSensitive] = useState(false);
+    ]; // Bark Groups Preset
+    const [useGroup, setUseGroup] = useState(false); // Group Toggle
+    const [group, setGroup] = useState("{{Title}}"); // Group
+    const [useTimeSensitive, setTimeSensitive] = useState(false); // Time Sensitive Toggle
+    
+    // Provider options Ends here
+
+    const [value, setValue] = useState("");
+    const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
 
     const [inputOpen, setInputOpen] = useState(false);
     const [progressOpen, setProgressOpen] = useState(false);
@@ -222,8 +227,8 @@ function Bark() {
 
                 }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
             </Box>
+            {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value}/>
-
         </>
     );
 }

@@ -14,7 +14,9 @@ const CarbonCopy: React.FC = () => {
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Bark", "Lark (Feishu)", "Pushdeer", "Gotify" ,"Curl"];
+    const tabLabels = ["Curl", "Bark", "Lark (Feishu)", "Pushdeer", "Gotify"];
+    // const tabLabels = ["Curl", "Bark", "Lark (Feishu)", "Pushdeer", "Gotify", "Template"];
+
 
     const [value, setValue] = useState(0);
 
@@ -78,22 +80,26 @@ const CarbonCopy: React.FC = () => {
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
                     <Tab label={tabLabels[3]} {...a11yProps(3)} />
                     <Tab label={tabLabels[4]} {...a11yProps(4)} />
+                    {/* <Tab label={tabLabels[5]} {...a11yProps(5)} /> */}
                 </Tabs>
                 <CustomTabPanel value={value} index={0}>
-                    <Bark/>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={1}>
-                    <Lark/>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
-                    <PushDeer/>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={3}>
-                    <Gotify/>
-                </CustomTabPanel>
-                <CustomTabPanel value={value} index={4}>
                     <Curl/>
                 </CustomTabPanel>
+                <CustomTabPanel value={value} index={1}>
+                    <Bark/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={2}>
+                    <Lark/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={3}>
+                    <PushDeer/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={4}>
+                    <Gotify/>
+                </CustomTabPanel>
+                {/* <CustomTabPanel value={value} index={5}>
+                    <Template/>
+                </CustomTabPanel> */}
             </Box>
         </Box>
     );

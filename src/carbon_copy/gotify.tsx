@@ -1,21 +1,22 @@
 import {Alert, Box, Button, IconButton, Link, TextField} from "@mui/material";
-import ContentCopyIcon from '@mui/icons-material/ContentCopy';
-import React, {useEffect, useState} from "react";
+import {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import {encrypt} from "../wasm/wasm_rs";
 import getHttpStatusMessage from "../constants/http";
 import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { materialDark } from 'react-syntax-highlighter/dist/esm/styles/prism';
 import DataDisplay from "../components/DataDisplay";
 
 function Gotify() {
+    // State Carbon Copy Provider Options
 
-    const [server, setServer] = useState("");
-    const [token, setToken] = useState("");
-    const [priority, setPriority] = useState(5);
+    const [server, setServer] = useState(""); // Webhook URL
+    const [token, setToken] = useState(""); // App Token
+    const [priority, setPriority] = useState(5); // Notification Priority
+
+    // Provider Options Ends here
+
     const [value, setValue] = useState('');
     const [errorMessage, setErrorMessage] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
@@ -110,19 +111,6 @@ function Gotify() {
         }
     }
 
-    const copyToClipboard = async (text: string) => {
-        try {
-            await navigator.clipboard.writeText(text);
-            setAlertTitle("Success");
-            setAlertMessage("Data copied to clipboard");
-            setAlertOpen(true);
-        } catch (err) {
-            setAlertTitle("Error");
-            setAlertMessage("Failed to copy data");
-            setAlertOpen(true);
-        }
-    };
-
     return (
         <>
             <ProgressDialog open={progressOpen} title="Loading" message={progressMessage}/>
@@ -151,11 +139,13 @@ function Gotify() {
                 }
             } label="Password" type="password"></InputDialog>
 
+            {/* Main Form */}
             <Box sx={{
                 display: "flex",
                 flexDirection: "column",
                 gap: 2
             }}>
+                {/* Carbon Copy Provider Options Display */}
                 <TextField type="text"
                     value={server} onChange={(event) => {
                     setServer(event.target.value);
@@ -180,6 +170,8 @@ function Gotify() {
                             helperText={errorMessage}
                             variant="outlined" 
                             required/>
+                
+                {/* Buttons */}
                 <Button type="button" onClick={() => {
                     setInputOpen(true)
                 }} disabled={server.trim() === ""}
@@ -196,7 +188,11 @@ function Gotify() {
                     }
                 }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
             </Box>
+
+            {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value}/>
+
+            {/* Comments */}
             <Box component="section" sx={{paddingBottom: "20px"}}>
                 <h2>COMMENT</h2>
                 <p>Server URL format is https://example.com/message</p>
@@ -219,10 +215,10 @@ function Gotify() {
     );
 }
 
-function decodeHtmlEntities(str: string) { 
-    const textarea = document.createElement('textarea'); 
-    textarea.innerHTML = str; 
-    return textarea.value; 
-} 
+// function decodeHtmlEntities(str: string) { 
+//     const textarea = document.createElement('textarea'); 
+//     textarea.innerHTML = str; 
+//     return textarea.value; 
+// } 
 
 export default Gotify;

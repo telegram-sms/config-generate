@@ -9,8 +9,12 @@ import InputDialog from "../components/InputDialog";
 import DataDisplay from "../components/DataDisplay";
 
 function Lark() {
+    // State Carbon Copy Provider Options
 
-    const [server, setServer] = useState("");
+    const [server, setServer] = useState(""); // Webhook URL
+
+    // Provider Options Ends here
+
     const [value, setValue] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, padding: 10, mime: 'image/png'});
 
@@ -157,6 +161,7 @@ function Lark() {
                     console.log(formData);
                 }} variant="contained" color="warning">Generate QR Code/ HAR Config</Button>
             </Box>
+            {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value}/>
         </>
     );
