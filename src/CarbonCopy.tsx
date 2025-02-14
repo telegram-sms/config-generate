@@ -6,6 +6,7 @@ import Lark from "./carbon_copy/lark";
 import PushDeer from "./carbon_copy/pushdeer";
 import Gotify from "./carbon_copy/gotify";
 import Curl from "./carbon_copy/curl";
+import Template from "./carbon_copy/template";
 
 
 const CarbonCopy: React.FC = () => {

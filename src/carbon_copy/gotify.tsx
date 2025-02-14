@@ -1,4 +1,4 @@
-import {Alert, Box, Button, IconButton, Link, TextField} from "@mui/material";
+import {Alert, Box, Button, IconButton, Link, Typography, TextField} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import {encrypt} from "../wasm/wasm_rs";
@@ -7,6 +7,14 @@ import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
 import DataDisplay from "../components/DataDisplay";
+import styled from "@emotion/styled";
+
+const CodeKeyword = styled.code`
+    color: deeppink;
+    background-color: #f9f2f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+`;
 
 function Gotify() {
     // State Carbon Copy Provider Options
@@ -193,22 +201,36 @@ function Gotify() {
             <DataDisplay value={value}/>
 
             {/* Comments */}
-            <Box component="section" sx={{paddingBottom: "20px"}}>
-                <h2>COMMENT</h2>
-                <p>Server URL format is https://example.com/message</p>
-                <p>In the request URL, Body, the following keywords can be used. The system will automatically replace
-                    these keywords based on the template you provide.</p>
+             {/* Comments */}
+             <Box component="section" sx={{ paddingBottom: "20px" }}>
+                <Typography variant="h4" gutterBottom>
+                    Comment Parameters
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    You can use the following keywords within the request URL or body. The system will automatically
+                    replace these keywords with their corresponding values based on the template you provide:
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    <ul>
+                        <li><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</li>
+                        <li><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</li>
+                        <li><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
+                            message. </li>
+                    </ul>
+                </Typography>
+                <Typography variant="h4" gutterBottom>
+                    <Link href="https://github.com/gotify/android?tab=readme-ov-file#message-priorities" target="_blank" rel="noopener">
+                        Notification Priority
+                    </Link>
+                </Typography>
+              <Typography >
+                For more information, please refer to the following descriptions (the default level is 5):
+                </Typography>
                 <ul>
-                    <li>{"{{Title}}: The title of the message"}</li>
-                    <li>{"{{Message}}: The content of the message"}</li>
-                    <li>{"{{Code}}: The Verification code of the message"}</li>
-                </ul>
-                <p>For <a href="https://github.com/gotify/android?tab=readme-ov-file#message-priorities" target="_blank" rel="noopener">Notification Priority</a>, the reference values are listed below (default level is 5):</p>
-                <ul>
-                    <li>0: No notification</li>
-                    <li>1-3: Icon in notification bar</li>
-                    <li>4-7: Icon in notification bar + Sound</li>
-                    <li>8-10: Icon in notification bar + Sound + Vibration</li>
+                    <li>0: No notification is displayed.</li>
+                    <li>1-3: An icon is displayed in the notification bar.</li>
+                    <li>4-7: An icon is displayed in the notification bar, accompanied by a sound.</li>
+                    <li>8-10: An icon is displayed in the notification bar, accompanied by both sound and vibration.</li>
                 </ul>
             </Box>
         </>

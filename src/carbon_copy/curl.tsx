@@ -1,4 +1,4 @@
-import {Alert, Box, Button, IconButton, Link, TextField} from "@mui/material";
+import {Alert, Box, Button, IconButton, Link, Typography, TextField} from "@mui/material";
 import React, {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import * as curlconverter from "curlconverter";
@@ -8,6 +8,14 @@ import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
 import DataDisplay from "../components/DataDisplay";
+import styled from "@emotion/styled";
+
+const CodeKeyword = styled.code`
+    color: deeppink;
+    background-color: #f9f2f4;
+    padding: 2px 4px;
+    border-radius: 4px;
+`;
 
 function Curl() {
     // State Carbon Copy Provider Options
@@ -137,15 +145,24 @@ function Curl() {
             </Box>
             {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value} debug={true}/>
-            <Box component="section" sx={{paddingBottom: "20px"}}>
-                <h2>COMMENT</h2>
-                <p>In the request URL, Body, the following keywords can be used. The system will automatically replace
-                    these keywords based on the template you provide.</p>
-                <ul>
-                    <li>{"{{Title}}: The title of the message"}</li>
-                    <li>{"{{Message}}: The content of the message"}</li>
-                    <li>{"{{Code}}: The Verification code of the message"}</li>
-                </ul>
+            
+             {/* Comments */}
+             <Box component="section" sx={{ paddingBottom: "20px" }}>
+                <Typography variant="h4" gutterBottom>
+                    Comment Parameters
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    You can use the following keywords within the request URL or body. The system will automatically
+                    replace these keywords with their corresponding values based on the template you provide:
+                </Typography>
+                <Typography variant="body1" gutterBottom>
+                    <ul>
+                        <li><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</li>
+                        <li><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</li>
+                        <li><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
+                            message. </li>
+                    </ul>
+                </Typography>
             </Box>
         </>
     );
