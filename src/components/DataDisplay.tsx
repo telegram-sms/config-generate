@@ -15,8 +15,8 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ value, debug=false }) => {
             return (
                 <Box sx={{ marginTop: 2 }}>
                     <Alert variant="filled" severity="info">
-                        <p>Your generated QR Code will be displayed here.</p>
-                        <p>Below the QR Code is the HAR data that you can copy and paste into the app directly.</p>
+                        Your generated QR Code will be displayed here.<br/>
+                        Below the QR Code is the HAR data that you can copy and paste into the app directly.
                     </Alert>
                 </Box>
             );
@@ -24,7 +24,7 @@ const DataDisplay: React.FC<DataDisplayProps> = ({ value, debug=false }) => {
         return (
             <Box sx={{ marginTop: 2 }}>
                 <Alert variant="filled" severity="info">
-                    <p>Your generated QR Code will be displayed here.</p>
+                    Your generated QR Code will be displayed here.
                 </Alert>
             </Box>
         );

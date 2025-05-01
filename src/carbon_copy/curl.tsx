@@ -147,7 +147,7 @@ function Curl() {
             <DataDisplay value={value} debug={true}/>
             
              {/* Comments */}
-             <Box component="section" sx={{ paddingBottom: "20px" }}>
+             <Box component="section" sx={{ paddingTop: "20px" }}>
                 <Typography variant="h4" gutterBottom>
                     Comment Parameters
                 </Typography>
