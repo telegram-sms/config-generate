@@ -16,7 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Home from '@mui/icons-material/Home';
 import MailIcon from '@mui/icons-material/Mail';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { BrowserRouter as Router, Route, Routes, useNavigate } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router';
 import ConfigQrcode from "./ConfigQrcode";
 import CarbonCopy from "./CarbonCopy";
 import * as React from "react";
@@ -102,8 +102,12 @@ export function App() {
             <NavBar />
             <Box sx={{ padding: 3 }}>
                 <Routes>
-                    <Route path="/" element={<ConfigQrcode />} />
+                    <Route index element={<ConfigQrcode />} />
                     <Route path="/carbon-copy" element={<CarbonCopy />} />
+                    <Route path="/carbon-copy/:id" element={<CarbonCopy />} />
+                    <Route path="/cc" element={<Navigate to="/carbon-copy" replace={true}/>} />
+                    <Route path="/cc/*" element={<Navigate to="/carbon-copy/" replace={true}/>} />
+                    <Route path="*" element={<Navigate to="/" replace={true}/>} />
                 </Routes>
             </Box>
         </Router>
