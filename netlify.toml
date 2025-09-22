@@ -4,4 +4,3 @@
   status = 200
 
 [[plugins]]
-  package = "netlify-plugin-rustup"
