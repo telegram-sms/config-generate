@@ -3,4 +3,7 @@
   to = "/index.html"
   status = 200
 
-[[plugins]]
+[build]
+  command = "npm run build:wasm && npm run build" 
+  functions = "functions" # 确保指定了 functions 目录
+  publish = "dist"
