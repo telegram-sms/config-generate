@@ -16,7 +16,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import Home from '@mui/icons-material/Home';
 import MailIcon from '@mui/icons-material/Mail';
 import GitHubIcon from '@mui/icons-material/GitHub';
-import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router';
+import { BrowserRouter as Router, Route, Routes, useNavigate, Navigate } from 'react-router-dom';
 import ConfigQrcode from "./ConfigQrcode";
 import CarbonCopy from "./CarbonCopy";
 import * as React from "react";

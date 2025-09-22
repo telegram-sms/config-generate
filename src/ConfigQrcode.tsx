@@ -20,6 +20,7 @@ import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
 import {encrypt} from "./wasm";
 import getHttpStatusMessage from "./constants/http";
+import { Form } from 'react-router-dom';
 
 interface FormData {
     bot_token: string;
@@ -31,6 +32,8 @@ interface FormData {
     chat_command: boolean;
     fallback_sms: boolean;
     privacy_mode: boolean;
+    display_dual_sim_display_name: boolean;
+    call_notify: boolean;
     verification_code: boolean;
 }
 
@@ -53,6 +56,8 @@ const ConfigQrcode: React.FC = () => {
         chat_command: false,
         fallback_sms: false,
         privacy_mode: false,
+        display_dual_sim_display_name: false,
+        call_notify: false,
         verification_code: false
     });
     const [alertOpen, setAlertOpen] = useState(false);
@@ -341,6 +346,18 @@ const ConfigQrcode: React.FC = () => {
                                     onChange={handleChange}
                                     color="warning"/>}
                                 label="Verification code automatic extraction (Alpha)"/>
+                            <FormControlLabel control={<Switch
+                                name="display_dual_sim_display_name"
+                                checked={formData.display_dual_sim_display_name}
+                                onChange={handleChange}
+                                color="warning"/>}
+                                              label="Display SIM card alias"/>
+                            <FormControlLabel control={<Switch
+                                name="call_notify"
+                                checked={formData.call_notify}
+                                onChange={handleChange}
+                                color="warning"/>}
+                                              label="Notify when call received"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
                                 ID</Button>
