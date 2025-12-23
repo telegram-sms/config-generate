@@ -24,6 +24,7 @@ import { Form } from 'react-router-dom';
 
 interface FormData {
     bot_token: string;
+    bot_api_address: string;
     chat_id: string;
     topic_id: string;
     trusted_phone_number: string;
@@ -35,6 +36,7 @@ interface FormData {
     display_dual_sim_display_name: boolean;
     call_notify: boolean;
     verification_code: boolean;
+    hide_phone_number: boolean;
 }
 
 const ConfigQrcode: React.FC = () => {
@@ -48,6 +50,7 @@ const ConfigQrcode: React.FC = () => {
     }, []);
     const [formData, setFormData] = useState<FormData>({
         bot_token: '',
+        bot_api_address: 'api.telegram.org',
         chat_id: '',
         topic_id: '',
         trusted_phone_number: '',
@@ -58,7 +61,8 @@ const ConfigQrcode: React.FC = () => {
         privacy_mode: false,
         display_dual_sim_display_name: false,
         call_notify: false,
-        verification_code: false
+        verification_code: false,
+        hide_phone_number: false
     });
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -117,7 +121,7 @@ const ConfigQrcode: React.FC = () => {
         setProgressMessage("Please send some messages to the bot...");
         setProgressOpen(true);
         try {
-            const response = await fetch('https://api.telegram.org/bot' + formData.bot_token + '/getUpdates?timeout=120');
+            const response = await fetch('https://' + formData.bot_api_address + '/bot' + formData.bot_token + '/getUpdates?timeout=120');
             if (!response.ok) {
                 throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
@@ -183,7 +187,7 @@ const ConfigQrcode: React.FC = () => {
         setProgressMessage("Transmitting, please wait...");
         setProgressOpen(true);
         try {
-            const response = await fetch('https://api.telegram-sms.com/config', {
+            const response = await fetch('https://' + formData.bot_api_address + '/config', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -297,6 +301,11 @@ const ConfigQrcode: React.FC = () => {
                                 onChange={handleChange}
                                 value={formData.trusted_phone_number} label="Trusted phone number"
                                 variant="outlined"/>
+                            <TextField
+                                name="bot_api_address"
+                                onChange={handleChange}
+                                value={formData.bot_api_address} label="Bot API Address(not ready to change yet, USE WITH CAUTION)"
+                                variant="outlined"/>
                         </Box>
                         <Box sx={{
                             display: "flex",
@@ -358,6 +367,12 @@ const ConfigQrcode: React.FC = () => {
                                 onChange={handleChange}
                                 color="warning"/>}
                                               label="Notify when call received"/>
+                            <FormControlLabel control={<Switch
+                                name="hide_phone_number"
+                                checked={formData.hide_phone_number}
+                                onChange={handleChange}
+                                color="warning"/>}
+                                              label="Hide Phone Number"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
                                     variant="outlined">Get recent chat
                                 ID</Button>
