@@ -11,7 +11,12 @@ import {
     Link,
     Switch,
     TextField,
-    useMediaQuery
+    useMediaQuery,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
 } from "@mui/material";
 import {useQrious} from 'react-qrious'
 import ProgressDialog from './components/ProgressDialog';
@@ -24,7 +29,7 @@ import { Form } from 'react-router-dom';
 
 interface FormData {
     bot_token: string;
-    bot_api_address: string;
+    api_address: string;
     chat_id: string;
     topic_id: string;
     trusted_phone_number: string;
@@ -50,7 +55,7 @@ const ConfigQrcode: React.FC = () => {
     }, []);
     const [formData, setFormData] = useState<FormData>({
         bot_token: '',
-        bot_api_address: 'api.telegram.org',
+        api_address: 'api.telegram.org',
         chat_id: '',
         topic_id: '',
         trusted_phone_number: '',
@@ -80,6 +85,22 @@ const ConfigQrcode: React.FC = () => {
     const [disableGetChatId, setDisableGetChatId] = useState(true);
     const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(true);
     const [progressMessage, setProgressMessage] = useState("Please send some messages to the bot...");
+    // For confirm dialog
+    const [customApiAddressConfirmOpen, setCustomApiAddressConfirmOpen] = useState(false);
+    const confirmResolver = useRef<((value: boolean) => void) | null>(null);
+    const requestConfirm = () => {
+        setCustomApiAddressConfirmOpen(true);
+        return new Promise<boolean>((resolve) => {
+            confirmResolver.current = resolve;
+        });
+    };
+    const handleDialogClose = (result: boolean) => {
+        setCustomApiAddressConfirmOpen(false);
+        if (confirmResolver.current) {
+            confirmResolver.current(result);
+            confirmResolver.current = null;
+        }
+    };
 
     useEffect(() => {
         setDisableGetChatId(String(formData.bot_token).trim() === '');
@@ -113,15 +134,27 @@ const ConfigQrcode: React.FC = () => {
         }
     };
 
-    const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
+    const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (formData.api_address !== 'api.telegram.org'){
+            const confirmed = await requestConfirm();
+            if (!confirmed) return;
+        }
         setValue(JSON.stringify(formData));
     };
     const handleGetRecentChatID = async () => {
+        if (formData.api_address !== 'api.telegram.org'){
+            const confirmed = await requestConfirm();
+            if (!confirmed) return;
+        }
+        await executeGetRecentChatID();
+    };
+
+    const executeGetRecentChatID = async () => {
         setProgressMessage("Please send some messages to the bot...");
         setProgressOpen(true);
         try {
-            const response = await fetch('https://' + formData.bot_api_address + '/bot' + formData.bot_token + '/getUpdates?timeout=120');
+            const response = await fetch('https://' + formData.api_address + '/bot' + formData.bot_token + '/getUpdates?timeout=120');
             if (!response.ok) {
                 throw new Error('Network response: ' + getHttpStatusMessage(response.status));
             }
@@ -187,7 +220,7 @@ const ConfigQrcode: React.FC = () => {
         setProgressMessage("Transmitting, please wait...");
         setProgressOpen(true);
         try {
-            const response = await fetch('https://' + formData.bot_api_address + '/config', {
+            const response = await fetch('https://' + formData.api_address + '/config', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
@@ -234,6 +267,27 @@ const ConfigQrcode: React.FC = () => {
             } label="Password" type="password"></InputDialog>
             <AlertDialog open={alertOpen} title={alertTitle} message={alertMessage}
                          onClose={() => setAlertOpen(false)}/>
+            <Dialog
+                open={customApiAddressConfirmOpen}
+                onClose={() => handleDialogClose(false)} 
+                aria-labelledby="alert-dialog-title"
+                aria-describedby="alert-dialog-description"
+            >
+                <DialogTitle id="alert-dialog-title">
+                    {"CAUTION"}
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Please make sure you have executed logOut operation on official bot api.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => handleDialogClose(false)}>Cancel</Button>
+                    <Button onClick={() => handleDialogClose(true)} autoFocus>
+                        Confirm
+                    </Button>
+                </DialogActions>
+            </Dialog>
             <SimpleDialog title={"Select a chat"} open={selectOpen}
                           onClose={function (index: number): void {
                               setFormData({
@@ -302,9 +356,9 @@ const ConfigQrcode: React.FC = () => {
                                 value={formData.trusted_phone_number} label="Trusted phone number"
                                 variant="outlined"/>
                             <TextField
-                                name="bot_api_address"
+                                name="api_address"
                                 onChange={handleChange}
-                                value={formData.bot_api_address} label="Bot API Address(not ready to change yet, USE WITH CAUTION)"
+                                value={formData.api_address} label="Bot API Address(not ready to change yet, USE WITH CAUTION)"
                                 variant="outlined"/>
                         </Box>
                         <Box sx={{
