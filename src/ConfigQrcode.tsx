@@ -410,12 +410,6 @@ const ConfigQrcode: React.FC = () => {
                                     color="warning"/>}
                                 label="Verification code automatic extraction (Alpha)"/>
                             <FormControlLabel control={<Switch
-                                name="display_dual_sim_display_name"
-                                checked={formData.display_dual_sim_display_name}
-                                onChange={handleChange}
-                                color="warning"/>}
-                                              label="Display SIM card alias"/>
-                            <FormControlLabel control={<Switch
                                 name="call_notify"
                                 checked={formData.call_notify}
                                 onChange={handleChange}

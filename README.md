@@ -30,8 +30,6 @@ You can implement a new Carbon Copy Provider by following the instructions [here
 ### Prerequisites
 - Node.js
 - npm
-- Rust
-- Cargo
 
 ### Steps
 1. Clone the repository:
@@ -43,13 +41,7 @@ You can implement a new Carbon Copy Provider by following the instructions [here
     ```sh
     npm install
     ```
-3. Build the wasm project:
-    ```sh
-    cargo install wasm-pack
-    mkdir -p ../src/wasm
-    npm run build:wasm
-    ```
-4. Start the development server:
+3. Start the development server:
     ```sh
     npm run dev
     ```
