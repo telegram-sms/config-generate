@@ -1,7 +1,7 @@
 import {Alert, Box, Button, TextField} from "@mui/material";
 import React, {useState} from "react";
 import {useQrious} from "react-qrious";
-import {encrypt} from "../wasm";
+import {encrypt} from "../crypto";
 import getHttpStatusMessage from "../constants/http";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
@@ -31,7 +31,7 @@ function Lark() {
             return;
         }
         const configJson = JSON.stringify(fromData);
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result
         }

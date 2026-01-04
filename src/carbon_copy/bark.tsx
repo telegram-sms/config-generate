@@ -4,13 +4,13 @@ import {useQrious} from "react-qrious";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
 import InputDialog from "../components/InputDialog";
-import {encrypt} from "../wasm";
+import {encrypt} from "../crypto";
 import getHttpStatusMessage from "../constants/http";
 import DataDisplay from "../components/DataDisplay";
 
 function Bark() {
     // State Carbon Copy Provider Options
-    
+
     const [server, setServer] = useState(""); // Webhook URL
     const [icon, setIcon] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4"); // Icon URL
     const barkSounds = [
@@ -24,7 +24,7 @@ function Bark() {
     const [useGroup, setUseGroup] = useState(false); // Group Toggle
     const [group, setGroup] = useState("{{Title}}"); // Group
     const [useTimeSensitive, setTimeSensitive] = useState(false); // Time Sensitive Toggle
-    
+
     // Provider options Ends here
 
     const [value, setValue] = useState("");
@@ -49,7 +49,7 @@ function Bark() {
             return;
         }
         const configJson = JSON.stringify(fromData);
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result
         }

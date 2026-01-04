@@ -1,7 +1,7 @@
 import {Alert, Box, Button, IconButton, Link, Typography, TextField} from "@mui/material";
 import {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
-import {encrypt} from "../wasm/wasm_rs";
+import {encrypt} from "../crypto";
 import getHttpStatusMessage from "../constants/http";
 import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
@@ -41,7 +41,7 @@ function Gotify() {
 
     async function handleSendConfig(password: string, fromData: any) {
         const configJson = JSON.stringify(fromData);
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result
         }
@@ -77,7 +77,7 @@ function Gotify() {
             } = {
                 name: "Gotify",
                 enabled: true,
-                har: {    
+                har: {
                     log: {
                         "version": "1.2",
                         "entries": [
@@ -109,7 +109,7 @@ function Gotify() {
                             }
                         ]
                         }
-                    
+
                 }
             }
             return formData;
@@ -160,7 +160,7 @@ function Gotify() {
                 }} label="Server URL"
                            error={errorMessage !== ''}
                            helperText={errorMessage}
-                           variant="outlined" 
+                           variant="outlined"
                            required/>
                 <TextField type="text"
                         value={token} onChange={(event) => {
@@ -168,7 +168,7 @@ function Gotify() {
                  }} label="Token"
                             error={errorMessage !== ''}
                             helperText={errorMessage}
-                            variant="outlined" 
+                            variant="outlined"
                             required/>
                 <TextField type="number"
                             value={priority} onChange={(event) => {
@@ -176,9 +176,9 @@ function Gotify() {
                         }} label="Priority"
                             error={errorMessage !== ''}
                             helperText={errorMessage}
-                            variant="outlined" 
+                            variant="outlined"
                             required/>
-                
+
                 {/* Buttons */}
                 <Button type="button" onClick={() => {
                     setInputOpen(true)
@@ -237,10 +237,10 @@ function Gotify() {
     );
 }
 
-// function decodeHtmlEntities(str: string) { 
-//     const textarea = document.createElement('textarea'); 
-//     textarea.innerHTML = str; 
-//     return textarea.value; 
-// } 
+// function decodeHtmlEntities(str: string) {
+//     const textarea = document.createElement('textarea');
+//     textarea.innerHTML = str;
+//     return textarea.value;
+// }
 
 export default Gotify;

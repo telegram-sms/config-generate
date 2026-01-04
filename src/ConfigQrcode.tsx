@@ -23,7 +23,7 @@ import ProgressDialog from './components/ProgressDialog';
 import SimpleDialog from "./components/SimpleDialog";
 import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
-import {encrypt} from "./wasm";
+import {encrypt} from "./crypto";
 import getHttpStatusMessage from "./constants/http";
 import { Form } from 'react-router-dom';
 
@@ -213,7 +213,7 @@ const ConfigQrcode: React.FC = () => {
 
     async function handleSendConfig(password: string) {
         const configJson = JSON.stringify(formData)
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result
         }
@@ -269,7 +269,7 @@ const ConfigQrcode: React.FC = () => {
                          onClose={() => setAlertOpen(false)}/>
             <Dialog
                 open={customApiAddressConfirmOpen}
-                onClose={() => handleDialogClose(false)} 
+                onClose={() => handleDialogClose(false)}
                 aria-labelledby="alert-dialog-title"
                 aria-describedby="alert-dialog-description"
             >

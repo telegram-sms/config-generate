@@ -2,7 +2,7 @@ import {Alert, Box, Button, IconButton, Link, Typography, TextField} from "@mui/
 import React, {useEffect, useState} from "react";
 import {useQrious} from "react-qrious";
 import * as curlconverter from "curlconverter";
-import {encrypt} from "../wasm";
+import {encrypt} from "../crypto";
 import getHttpStatusMessage from "../constants/http";
 import InputDialog from "../components/InputDialog";
 import ProgressDialog from "../components/ProgressDialog";
@@ -40,7 +40,7 @@ function Curl() {
 
     async function handleSendConfig(password: string, fromData: any) {
         const configJson = JSON.stringify(fromData);
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result
         }
@@ -145,7 +145,7 @@ function Curl() {
             </Box>
             {/* Data Display, including QR Code and HAR Config */}
             <DataDisplay value={value} debug={true}/>
-            
+
              {/* Comments */}
              <Box component="section" sx={{ paddingTop: "20px" }}>
                 <Typography variant="h4" gutterBottom>

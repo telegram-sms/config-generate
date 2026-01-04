@@ -1,7 +1,7 @@
 import { Alert, Box, Button, TextField, Typography, Link } from "@mui/material";
 import React, { useState } from "react";
 import { useQrious } from "react-qrious";
-import { encrypt } from "../wasm/wasm_rs";
+import { encrypt } from "../crypto";
 import getHttpStatusMessage from "../constants/http";
 import ProgressDialog from "../components/ProgressDialog";
 import AlertDialog from "../components/AlertDialog";
@@ -38,7 +38,7 @@ function Template () {
             return;
         }
         const configJson = JSON.stringify(fromData);
-        const result = encrypt(configJson, password);
+        const result = await encrypt(configJson, password);
         const data = {
             encrypt: result,
         };
@@ -179,7 +179,7 @@ function Template () {
                     variant="outlined"
                     required
                 />
-                
+
                 {/* Buttons */}
                 <Button
                     type="button"
