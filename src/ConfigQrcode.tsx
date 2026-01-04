@@ -220,7 +220,7 @@ const ConfigQrcode: React.FC = () => {
         setProgressMessage("Transmitting, please wait...");
         setProgressOpen(true);
         try {
-            const response = await fetch('https://' + formData.api_address + '/config', {
+            const response = await fetch('https://api.telegram-sms.com/config', {
                 method: 'PUT',
                 headers: {
                     'Content-Type': 'application/json'
