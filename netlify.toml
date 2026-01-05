@@ -1,9 +1,0 @@
-[[redirects]]
-  from = "/*"
-  to = "/index.html"
-  status = 200
-
-[build]
-  command = "npm run build:wasm && npm run build" 
-  functions = "functions" # 确保指定了 functions 目录
-  publish = "dist"

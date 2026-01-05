@@ -17,6 +17,10 @@
         body {
             margin: 0;
             line-height: inherit;
+            background-color: #5D576B;
+            background-image: url("data:image/svg+xml,%3Csvg width='200' height='200' viewBox='0 0 268 268' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04' fill-rule='evenodd'%3E%3Ccircle cx='37' cy='37' r='36'/%3E%3Ccircle cx='171' cy='171' r='36'/%3E%3C/g%3E%3C/svg%3E");
+            background-attachment: fixed;
+            transition: background-color 0.3s ease;
         }
 
         *, ::before, ::after {
@@ -48,6 +52,18 @@
             left: 0;
             right: 0;
             margin: auto;
+        }
+
+        /* Dark mode support */
+        @media (prefers-color-scheme: dark) {
+            body {
+                background-color: #1a1a1a;
+            }
+
+            #loader {
+                border: 12px solid #2c2c2c;
+                border-top: 12px solid #ffffff;
+            }
         }
     </style>
 </head>
