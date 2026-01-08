@@ -17,6 +17,9 @@ const CodeKeyword = styled.code`
 `;
 
 
+// This is a Build Template for Carbon Copy Provider
+// You can copy this file and modify it to create a new provider
+// Make sure to change the file name and the function name accordingly
 function Template () {
     // State Carbon Copy Provider Options
     const [server, setServer] = useState("");

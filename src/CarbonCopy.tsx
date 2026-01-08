@@ -6,7 +6,6 @@ import Lark from "./carbon_copy/lark";
 import PushDeer from "./carbon_copy/pushdeer";
 import Gotify from "./carbon_copy/gotify";
 import Curl from "./carbon_copy/curl";
-import Template from "./carbon_copy/template";
 
 
 const CarbonCopy: React.FC = () => {
@@ -16,9 +15,6 @@ const CarbonCopy: React.FC = () => {
         padding = null;
     }
     const tabLabels = ["Curl", "Bark", "Lark (Feishu)", "Pushdeer", "Gotify"];
-    // const tabLabels = ["Curl", "Bark", "Lark (Feishu)", "Pushdeer", "Gotify", "Template"];
-
-
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -98,9 +94,6 @@ const CarbonCopy: React.FC = () => {
                 <CustomTabPanel value={value} index={4}>
                     <Gotify/>
                 </CustomTabPanel>
-                {/* <CustomTabPanel value={value} index={5}>
-                    <Template/>
-                </CustomTabPanel> */}
             </Box>
         </Box>
     );

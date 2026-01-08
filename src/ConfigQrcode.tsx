@@ -187,18 +187,41 @@ const ConfigQrcode: React.FC = () => {
         const chatIdList: string[] = [];
         const chatThreadIdList: string[] = [];
         const chatList = message.result;
+        const chatIdMap = new Map<number, number>(); // Map old chat_id to new chat_id for migration
 
         chatList.forEach((itemObj: any) => {
             const messageObj = itemObj.message || itemObj.channel_post;
             if (messageObj) {
                 const chatObj = messageObj.chat;
-                if (!chatIdList.includes(chatObj.id)) {
+                let chatId = chatObj.id;
+
+                // Handle group migration to supergroup
+                if (messageObj.migrate_to_chat_id) {
+                    chatIdMap.set(chatId, messageObj.migrate_to_chat_id);
+                    chatId = messageObj.migrate_to_chat_id;
+                } else if (messageObj.migrate_from_chat_id) {
+                    // If we encounter the new supergroup, map the old ID to this one
+                    chatIdMap.set(messageObj.migrate_from_chat_id, chatId);
+                }
+
+                // Apply any known migrations
+                if (chatIdMap.has(chatId)) {
+                    chatId = chatIdMap.get(chatId)!;
+                }
+
+                if (!chatIdList.includes(chatId)) {
                     let username = chatObj.username || chatObj.title || '';
                     if (!username) {
                         username = [chatObj.first_name, chatObj.last_name].filter(Boolean).join(' ');
                     }
-                    chatNameList.push(`${username} (${chatObj.type || 'Channel'})`);
-                    chatIdList.push(chatObj.id);
+
+                    // Add suffix for migrated supergroups
+                    const chatType = messageObj.migrate_to_chat_id || messageObj.migrate_from_chat_id
+                        ? 'Supergroup'
+                        : (chatObj.type || 'Channel');
+
+                    chatNameList.push(`${username} (${chatType})`);
+                    chatIdList.push(chatId);
                     chatThreadIdList.push(messageObj.message_thread_id ? messageObj.message_thread_id.toString() : '');
                 }
             }
