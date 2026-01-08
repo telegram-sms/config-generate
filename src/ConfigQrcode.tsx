@@ -4,7 +4,6 @@
 import React, {useEffect, useRef, useState} from 'react';
 import {
     Alert,
-    alertTitleClasses,
     Box,
     Button,
     FormControlLabel,
@@ -25,7 +24,6 @@ import InputDialog from "./components/InputDialog";
 import AlertDialog from "./components/AlertDialog";
 import {encrypt} from "./crypto";
 import getHttpStatusMessage from "./constants/http";
-import { Form } from 'react-router-dom';
 
 interface FormData {
     bot_token: string;

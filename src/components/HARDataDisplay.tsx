@@ -5,14 +5,10 @@ import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
 import { materialDark } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 interface HARDataDisplayProps {
-    value: string; // 要显示的 JSON 字符串
+    value: string;
 }
 
-/**
-
-HARDataDisplay 封装了 HAR 的显示和复制逻辑
-子组件会自行处理复制成功/失败的提示，不再依赖父组件传入的 onCopy。
-*/
+// HARDataDisplay displays HAR data with syntax highlighting and copy-to-clipboard functionality
 const HARDataDisplay: FC<HARDataDisplayProps> = ({ value }) => {
     const [snackbarOpen, setSnackbarOpen] = useState(false);
     const [snackbarMessage, setSnackbarMessage] = useState("");
@@ -23,7 +19,7 @@ const HARDataDisplay: FC<HARDataDisplayProps> = ({ value }) => {
         try {
             return JSON.stringify(JSON.parse(value), null, 2);
         } catch (e) {
-            // 如果 JSON 无法解析，返回原始字符串
+            console.error("Failed to parse JSON:", e);
             return value;
         }
     })();
@@ -51,7 +47,7 @@ const HARDataDisplay: FC<HARDataDisplayProps> = ({ value }) => {
                 borderRadius: "4px",
             }}
         >
-            {/* 标题与复制按钮 */}
+            {/* Title and copy button */}
             <Box
                 sx={{
                     display: "flex",
@@ -66,7 +62,7 @@ const HARDataDisplay: FC<HARDataDisplayProps> = ({ value }) => {
                 </IconButton>
             </Box>
 
-            {/* 代码高亮显示区域 */}
+            {/* Code syntax highlighting area */}
             <Box
                 sx={{
                     maxHeight: "800px",
@@ -80,7 +76,7 @@ const HARDataDisplay: FC<HARDataDisplayProps> = ({ value }) => {
                 </SyntaxHighlighter>
             </Box>
 
-            {/* 用 Snackbar 显示提示信息 */}
+            {/* Display notification message with Snackbar */}
             <Snackbar
                 open={snackbarOpen}
                 autoHideDuration={3000}

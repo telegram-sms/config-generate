@@ -1,4 +1,4 @@
-import { createTheme, styled } from '@mui/material/styles';
+import { createTheme } from '@mui/material/styles';
 import { red } from '@mui/material/colors';
 
 // Augment the palette to include config box and app background option

@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from "react";
+import React, {useState} from "react";
 import {Tab, Tabs, Box, useMediaQuery} from "@mui/material";
 import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
@@ -77,7 +77,6 @@ const CarbonCopy: React.FC = () => {
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
                     <Tab label={tabLabels[3]} {...a11yProps(3)} />
                     <Tab label={tabLabels[4]} {...a11yProps(4)} />
-                    {/* <Tab label={tabLabels[5]} {...a11yProps(5)} /> */}
                 </Tabs>
                 <CustomTabPanel value={value} index={0}>
                     <Curl/>
