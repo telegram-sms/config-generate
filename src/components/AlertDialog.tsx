@@ -14,7 +14,7 @@ interface AlertDialogProps {
 
 const AlertDialog: React.FC<AlertDialogProps> = ({open, title, message, onClose}) => {
     return (
-        <Dialog open={open} onClose={onClose} PaperProps={{style: {width: '500px'}}}>
+        <Dialog open={open} onClose={onClose} slotProps={{paper: {style: {width: '500px'}}}}>
             <DialogTitle>{title}</DialogTitle>
             <DialogContent>
                 <div style={{whiteSpace: 'pre-wrap'}}>{message}</div>

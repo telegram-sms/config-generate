@@ -27,9 +27,11 @@ function SimpleDialog(props: SimpleDialogProps) {
     };
 
     return (
-        <Dialog PaperProps={{
-            style: {
-                width: '500px',
+        <Dialog slotProps={{
+            paper: {
+                style: {
+                    width: '500px',
+                }
             }
         }} onClose={handleClose} open={open}>
             <DialogTitle>{title}</DialogTitle>

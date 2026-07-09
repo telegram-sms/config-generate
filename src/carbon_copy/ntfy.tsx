@@ -16,12 +16,23 @@ const CodeKeyword = styled.code`
     border-radius: 4px;
 `;
 
-function Gotify() {
+function generateNtfyTopic() {
+  const array = new Uint8Array(12);
+  crypto.getRandomValues(array);
+  return btoa(String.fromCharCode(...array))
+    .replace(/[+/=]/g, '')
+    .substring(0, 16);
+}
+
+function Ntfy() {
     // State Carbon Copy Provider Options
 
-    const [server, setServer] = useState(""); // Webhook URL
-    const [token, setToken] = useState(""); // App Token
-    const [priority, setPriority] = useState(5); // Notification Priority
+    const [server, setServer] = useState("https://ntfy.sh"); // Webhook URL
+    const [topic, setTopic] = useState(generateNtfyTopic());
+    const [token, setToken] = useState(""); // topic Token
+    const [authString, setAuthString] = useState(""); // Http Basic Auth
+    const [priority, setPriority] = useState(3); // Notification Priority
+    const [iconUrl, setIconUrl] = useState("https://avatars.githubusercontent.com/u/50076056?s=128&v=4"); // Notification icon
 
     // Provider Options Ends here
 
@@ -70,12 +81,12 @@ function Gotify() {
     }
     function getFormData() {
         try {
-            const formData: {
+            var formData: {
                 name: string,
                 enabled: boolean,
                 har: HAR,
             } = {
-                name: "Gotify",
+                name: "Ntfy",
                 enabled: true,
                 har: {
                     log: {
@@ -84,33 +95,56 @@ function Gotify() {
                             {
                                 "request": {
                                     "method": "POST",
-                                    "url": `${server}/message`,
+                                    "url": `${server}/${topic}`,
                                     "httpVersion": "HTTP/1.1",
                                     "cookies": [],
                                     "headers": [
-                                        {
-                                            "name": "Content-Type",
-                                            "value": "application/json"
-                                        }
                                     ],
                                     "queryString": [
                                         {
-                                            "name": "token",
-                                            "value": token
+                                            "name": "title",
+                                            "value": "{{Title}}"
+                                        },
+                                        {
+                                            "name": "priority",
+                                            "value": `${priority}`
+                                        },
+                                        {
+                                            "name": "actions",
+                                            "value": "copy, Copy extracted verification codes, {{Code}}"
+                                        },
+                                        {
+                                            "name": "icon",
+                                            "value": `${iconUrl}`
                                         }
                                     ],
                                     "headersSize": -1,
                                     "bodySize": -1,
                                     "postData": {
-                                        "mimeType": "application/json",
-                                        "text": `{\"message\": \"{{Message}}\", \"title\": \"{{Title}}\", \"priority\":${priority}, \"extras\": {\"client::display\": {\"contentType\": \"text/markdown\"}}}`
+                                        "mimeType": "text/plain",
+                                        "text": "{{Message}}"
                                     }
                                 }
                             }
                         ]
                         }
 
+                    }
                 }
+            if (token){
+                formData.har.log.entries[0].request.headers.push(
+                    {
+                        "name": "Authorization",
+                        "value": `Bearer ${token}`
+                    }
+                )
+            } else if(authString){
+                formData.har.log.entries[0].request.headers.push(
+                    {
+                        "name": "Authorization",
+                        "value": `Basic ${btoa(authString)}`
+                    }
+                )
             }
             return formData;
         }catch (e: any) {
@@ -157,7 +191,15 @@ function Gotify() {
                 <TextField type="text"
                     value={server} onChange={(event) => {
                     setServer(event.target.value);
-                }} label="Server URL(should be https://<your instance domain>)"
+                }} label="Server URL"
+                           error={errorMessage !== ''}
+                           helperText={errorMessage}
+                           variant="outlined"
+                           required/>
+                 <TextField type="text"
+                    value={topic} onChange={(event) => {
+                    setTopic(event.target.value);
+                }} label="ntfy topic"
                            error={errorMessage !== ''}
                            helperText={errorMessage}
                            variant="outlined"
@@ -165,15 +207,31 @@ function Gotify() {
                 <TextField type="text"
                         value={token} onChange={(event) => {
                         setToken(event.target.value);
-                 }} label="Token"
+                 }} label="Authentication Token"
                             error={errorMessage !== ''}
                             helperText={errorMessage}
                             variant="outlined"
-                            required/>
+                            />
+                {/* <TextField type="text"
+                        value={authString} onChange={(event) => {
+                        setAuthString(event.target.value);
+                 }} label="Basic Auth String - NOT RECOMMENDED"
+                            error={errorMessage !== ''}
+                            helperText={errorMessage}
+                            variant="outlined"
+                            /> */}
                 <TextField type="number"
                             value={priority} onChange={(event) => {
                             setPriority(Number(event.target.value));
                         }} label="Priority"
+                            error={errorMessage !== ''}
+                            helperText={errorMessage}
+                            variant="outlined"
+                            required/>
+                <TextField type="text"
+                            value={iconUrl} onChange={(event) => {
+                            setIconUrl(event.target.value);
+                        }} label="Icon URL"
                             error={errorMessage !== ''}
                             helperText={errorMessage}
                             variant="outlined"
@@ -204,22 +262,16 @@ function Gotify() {
              {/* Comments */}
              <Box component="section" sx={{ paddingTop: "20px" }}>
                 <Typography variant="h4" gutterBottom>
-                    Comment Parameters
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                    You can use the following keywords within the request URL or body. The system will automatically
-                    replace these keywords with their corresponding values based on the template you provide:
+                    Note
                 </Typography>
                 <Typography variant="body1" gutterBottom>
                     <ul>
-                        <li><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</li>
-                        <li><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</li>
-                        <li><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
-                            message. </li>
+                        <li><CodeKeyword>{`Token`}</CodeKeyword> is <strong>NOT REQUIRED</strong> and is dependant to your server and topic.</li>
+                        {/* <li><CodeKeyword>{`Basic Auth String`}(username:password)</CodeKeyword> is <strong>NOT REQUIRED</strong> and <strong>STRONGLY DISCOURAGED</strong>. USE TOKEN IF POSSIBLE.</li> */}
                     </ul>
                 </Typography>
                 <Typography variant="h4" gutterBottom>
-                    <Link href="https://github.com/gotify/android?tab=readme-ov-file#message-priorities" target="_blank" rel="noopener">
+                    <Link href="https://docs.ntfy.sh/publish/#message-priority" target="_blank" rel="noopener">
                         Notification Priority
                     </Link>
                 </Typography>
@@ -227,10 +279,11 @@ function Gotify() {
                 For more information, please refer to the following descriptions (the default level is 5):
                 </Typography>
                 <ul>
-                    <li>0: No notification is displayed.</li>
-                    <li>1-3: An icon is displayed in the notification bar.</li>
-                    <li>4-7: An icon is displayed in the notification bar, accompanied by a sound.</li>
-                    <li>8-10: An icon is displayed in the notification bar, accompanied by both sound and vibration.</li>
+                    <li>1: Min priority. No vibration or sound. The notification will be under the fold in "Other notifications".</li>
+                    <li>2: Low priority. No vibration or sound. Notification will not visibly show up until notification drawer is pulled down.</li>
+                    <li>3: Default priority. Short default vibration and sound. Default notification behavior.</li>
+                    <li>4: High priority. Long vibration burst, default notification sound with a pop-over notification.</li>
+                    <li>5: Max priority. Really long vibration bursts, default notification sound with a pop-over notification.</li>
                 </ul>
             </Box>
         </>
@@ -243,4 +296,4 @@ function Gotify() {
 //     return textarea.value;
 // }
 
-export default Gotify;
+export default Ntfy;

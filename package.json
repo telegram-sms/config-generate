@@ -30,6 +30,8 @@
     "@types/react-dom": "19.0.3",
     "@types/react-syntax-highlighter": "^15.5.13",
     "@vitejs/plugin-react": "latest",
+    "esbuild": "^0.28.1",
+    "rollup": "^4.62.2",
     "typescript": "latest",
     "vite": "latest",
     "vite-plugin-top-level-await": "^1.4.4"

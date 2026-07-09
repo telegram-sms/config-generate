@@ -32,9 +32,11 @@ const InputDialog: React.FC<InputDialogProps> = ({open, title, label, type, onCl
     };
 
     return (
-        <Dialog open={open} onClose={() => onClose('')} PaperProps={{
-            style: {
-                width: '500px',
+        <Dialog open={open} onClose={() => onClose('')} slotProps={{
+            paper: {
+                style: {
+                    width: '500px',
+                }
             }
         }}>
             <DialogTitle>{title}</DialogTitle>

@@ -6,6 +6,7 @@ import Lark from "./carbon_copy/lark";
 import PushDeer from "./carbon_copy/pushdeer";
 import Gotify from "./carbon_copy/gotify";
 import Curl from "./carbon_copy/curl";
+import Ntfy from "./carbon_copy/ntfy";
 
 
 const CarbonCopy: React.FC = () => {
@@ -14,7 +15,7 @@ const CarbonCopy: React.FC = () => {
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Curl", "Bark", "Lark (Feishu)", "Pushdeer", "Gotify"];
+    const tabLabels = ["Curl", "Bark", "Ntfy", "Lark (Feishu)", "Pushdeer", "Gotify" ];
     const [value, setValue] = useState(0);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
@@ -77,6 +78,7 @@ const CarbonCopy: React.FC = () => {
                     <Tab label={tabLabels[2]} {...a11yProps(2)} />
                     <Tab label={tabLabels[3]} {...a11yProps(3)} />
                     <Tab label={tabLabels[4]} {...a11yProps(4)} />
+                    <Tab label={tabLabels[5]} {...a11yProps(5)} />
                 </Tabs>
                 <CustomTabPanel value={value} index={0}>
                     <Curl/>
@@ -84,14 +86,17 @@ const CarbonCopy: React.FC = () => {
                 <CustomTabPanel value={value} index={1}>
                     <Bark/>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={2}>
+                <CustomTabPanel value={value} index={3}>
                     <Lark/>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={3}>
+                <CustomTabPanel value={value} index={4}>
                     <PushDeer/>
                 </CustomTabPanel>
-                <CustomTabPanel value={value} index={4}>
+                <CustomTabPanel value={value} index={5}>
                     <Gotify/>
+                </CustomTabPanel>
+                <CustomTabPanel value={value} index={2}>
+                    <Ntfy/>
                 </CustomTabPanel>
             </Box>
         </Box>
