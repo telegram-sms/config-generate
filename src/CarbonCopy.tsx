@@ -1,4 +1,5 @@
-import React, {useState} from "react";
+import React, {useEffect, useState} from "react";
+import {useParams} from "react-router-dom";
 import {Tab, Tabs, Box, useMediaQuery} from "@mui/material";
 import Bark from "./carbon_copy/bark";
 import CustomTabPanel from "./components/CustomTabPanel";
@@ -8,15 +9,33 @@ import Gotify from "./carbon_copy/gotify";
 import Curl from "./carbon_copy/curl";
 import Ntfy from "./carbon_copy/ntfy";
 
+const tabLabels = ["Curl", "Bark", "Ntfy", "Lark (Feishu)", "Pushdeer", "Gotify"];
+
+const labelToSlug = (label: string): string =>
+    label.toLowerCase().split(" ")[0].replace(/[^a-z0-9]/g, "");
+
+const tabSlugs = tabLabels.map(labelToSlug);
+
+const slugToIndex = (slug?: string): number => {
+    if (!slug) return 0;
+    const normalized = slug.toLowerCase();
+    if (normalized === "feishu") return 3;
+    const index = tabSlugs.indexOf(normalized);
+    return index >= 0 ? index : 0;
+};
 
 const CarbonCopy: React.FC = () => {
+    const {id} = useParams();
     const isNonMobile = useMediaQuery('(min-width:600px)');
     let padding: any = "0px";
     if (!isNonMobile) {
         padding = null;
     }
-    const tabLabels = ["Curl", "Bark", "Ntfy", "Lark (Feishu)", "Pushdeer", "Gotify" ];
-    const [value, setValue] = useState(0);
+    const [value, setValue] = useState(slugToIndex(id));
+
+    useEffect(() => {
+        setValue(slugToIndex(id));
+    }, [id]);
 
     const handleChange = (event: React.SyntheticEvent, newValue: number) => {
         setValue(newValue);
