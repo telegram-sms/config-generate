@@ -40,6 +40,7 @@ interface FormData {
     call_notify: boolean;
     verification_code: boolean;
     hide_phone_number: boolean;
+    doh_switch: boolean;
 }
 
 const ConfigQrcode: React.FC = () => {
@@ -65,7 +66,8 @@ const ConfigQrcode: React.FC = () => {
         display_dual_sim_display_name: false,
         call_notify: false,
         verification_code: false,
-        hide_phone_number: false
+        hide_phone_number: false,
+        doh_switch: true
     });
     const [alertOpen, setAlertOpen] = useState(false);
     const [alertMessage, setAlertMessage] = useState('');
@@ -81,12 +83,16 @@ const ConfigQrcode: React.FC = () => {
     const [value, setValue] = useState('');
     const [qrCode, _qrious] = useQrious({value, size: 512, mime: 'image/png'});
     const [disableGetChatId, setDisableGetChatId] = useState(true);
-    const [disableGenerateQRCode, setDisableGenerateQRCode] = useState(true);
+    const [disableConfigGeneration, setDisableConfigGeneration] = useState(true);
     const [progressMessage, setProgressMessage] = useState("Please send some messages to the bot...");
     // For confirm dialog
     const [customApiAddressConfirmOpen, setCustomApiAddressConfirmOpen] = useState(false);
+    const [confirmDialogTitle, setConfirmDialogTitle] = useState('CAUTION');
+    const [confirmDialogMessage, setConfirmDialogMessage] = useState('Please make sure you have executed logOut operation on official bot api.\nSelect logOut if you need to make the execution here.');
     const confirmResolver = useRef<((value: boolean) => void) | null>(null);
-    const requestConfirm = () => {
+    const requestConfirm = (title?: string, message?: string) => {
+        setConfirmDialogTitle(title ?? 'CAUTION');
+        setConfirmDialogMessage(message ?? '');
         setCustomApiAddressConfirmOpen(true);
         return new Promise<boolean>((resolve) => {
             confirmResolver.current = resolve;
@@ -100,10 +106,25 @@ const ConfigQrcode: React.FC = () => {
         }
     };
 
+    // Trusted phone number + fallback_sms 警告：两个开关都开才会真的发 SMS
+    const tpnWarningTitle = '⚠️ SMS Billing Risk';
+    const tpnWarningMsgDeploy = 'You have enabled SMS fallback to a Trusted phone number.\nWhen the device loses network connectivity (or is blocked from accessing the Telegram Bot API), the bot will forward messages to this number via SMS, which may incur PER-MESSAGE charges from your carrier.\n\nIn the worst case (network keeps dropping), this can generate a large volume of SMS in a retry loop and produce a HUGE phone bill.\n\nPlease double-check:\n• The trusted number is correct and is on a plan that can absorb the traffic\n• You understand the carrier may charge per SMS\n• You have considered disabling fallback_sms if you do not actually need SMS fallback\n\nContinue anyway?'
+    const tpnWarningMsgTest = 'You have enabled SMS fallback to a Trusted phone number in your configuration.\n\nThis test only verifies that your bot can reach Telegram — it will NOT trigger SMS fallback (web pages cannot send SMS).\n\nHowever, once you deploy this configuration to a device, the bot will forward messages to the trusted number via SMS when the device loses network connectivity (or is blocked from the Telegram Bot API), which may incur PER-MESSAGE charges from your carrier.\n\nIn the worst case (network keeps dropping), this can generate a large volume of SMS in a retry loop and produce a HUGE phone bill.\n\nPlease double-check:\n• The trusted number is correct and is on a plan that can absorb the traffic\n• You understand the carrier may charge per SMS\n• You have considered disabling fallback_sms if you do not actually need SMS fallback\n\nContinue testing?'
+    async function tpnWarning(isTest = false): Promise<boolean> {
+        if (formData.trusted_phone_number.trim().length > 0 && formData.fallback_sms) {
+            const confirmed = await requestConfirm(
+                tpnWarningTitle,
+                isTest ? tpnWarningMsgTest : tpnWarningMsgDeploy
+            );
+            if (!confirmed) return false;
+        }
+        return true;
+    }
+
     useEffect(() => {
-        setDisableGetChatId(String(formData.bot_token).trim() === '');
-        setDisableGenerateQRCode(String(formData.bot_token).trim() === '' || String(formData.chat_id).trim() === '');
-    }, [formData]);
+        setDisableGetChatId(String(formData.bot_token).trim() === '' || String(formData.api_address).trim() === '');
+        setDisableConfigGeneration(disableGetChatId || String(formData.chat_id).trim() === '');
+    }, [formData,[disableGetChatId]]);
 
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -111,7 +132,7 @@ const ConfigQrcode: React.FC = () => {
         if (name === 'chat_id' && !/^-?\d*$/.test(value)) {
             return; // Ignore non-numeric input
         }
-        console.log(name, value, type, checked);
+        // console.log(name, value, type, checked);
         setFormData({
             ...formData,
             [name]: type === 'checkbox' ? checked : value,
@@ -134,6 +155,7 @@ const ConfigQrcode: React.FC = () => {
 
     const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
         e.preventDefault();
+        if (!(await tpnWarning())) return;
         if (formData.api_address !== 'api.telegram.org'){
             const confirmed = await requestConfirm();
             if (!confirmed) return;
@@ -260,6 +282,97 @@ const ConfigQrcode: React.FC = () => {
             setProgressOpen(false);
         }
     }
+    async function logOutFromOfficialAPI(){
+        setProgressMessage("Requesting logOut to official API instance...");
+        setProgressOpen(true);
+        try{
+            const response = await fetch('https://api.telegram.org/bot'+ formData.bot_token +'/logOut');
+            const data = await response.json();
+            if (!response.ok) {
+                throw new Error((data.error_code + " " + data.description));
+                }
+            if (data.ok) {
+                setAlertTitle("logOut completed!");
+                setAlertMessage("Logged out from official Telegram Bot API.\nClick confirm to continue your operations.");
+                setAlertOpen(true);
+            }
+        } catch (error: any) {
+            setAlertTitle("Error");
+            setAlertMessage(error.message);
+            setAlertOpen(true);
+        } finally {
+            setProgressOpen(false);
+            setTimeout(() => {
+                setAlertOpen(false);
+            }, 5000);
+        }
+    }
+
+    async function testTgApiConfig() {
+        if (formData.api_address !== 'api.telegram.org'){
+            const confirmed = await requestConfirm();
+            if (!confirmed) return;
+        }
+        setProgressMessage("Testing bot...");
+        setProgressOpen(true);
+        try{
+            const payload = {
+            chat_id: formData.chat_id,
+            text: `[System Information]\nConnected to the Telegram Server.`
+            };
+            const response = await fetch('https://' + formData.api_address + '/bot' + formData.bot_token + '/sendMessage',{
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(payload)
+            });
+            const data = await response.json();
+            // console.log(JSON.stringify(data))
+            if (data.ok) {
+                // setAlertMessage("Test success!");
+                // Telegram 成功时返回 { ok: true, result: {...} }
+                // result 里有 message_id / from / chat / date / text
+                const r = data.result || {};
+                const b = r.from || {};
+                const botId = b.id? `\nBot ID: ${b.id}`: '';
+                const botName = b.first_name? `\nBot Name: ${b.first_name}`: '';
+                const botUsername = b.username? `\nBot Username: ${b.username}\n`: '';
+                const chatInfo = r.chat || {};
+                const chatIdInfo = chatInfo.id ? `\nTarget chat_id: ${chatInfo.id}` : '';
+                const chatTitle = chatInfo.title
+                    ? `\nGroup: ${chatInfo.title}`
+                    : chatInfo.username
+                    ? `\nUser: @${chatInfo.username}`
+                    : chatInfo.first_name
+                    ? `\nUser: ${chatInfo.first_name}${chatInfo.last_name ? ' ' + chatInfo.last_name : ''}`
+                    : '';
+                setAlertTitle("Test completed!");
+                setAlertMessage(
+                    botId +
+                    botName +
+                    botUsername +
+                    `message_id: ${r.message_id ?? 'N/A'}` +
+                    chatTitle +
+                    chatIdInfo
+                );
+                setAlertOpen(true);
+            } else {
+                // Telegram 失败时返回 { ok: false, error_code, description }
+                throw new Error(`[${data.error_code ?? '?'}] ${data.description ?? 'Unknown error'}`);
+            }
+        } catch (error: any) {
+            setAlertTitle("Error");
+            setAlertMessage(error.message);
+            setAlertOpen(true);
+        } finally {
+            setProgressOpen(false);
+            setTimeout(() => {
+                setAlertOpen(false);
+            }, 10000);
+        }
+    }
+
 
 
     return (
@@ -295,15 +408,18 @@ const ConfigQrcode: React.FC = () => {
                 aria-describedby="alert-dialog-description"
             >
                 <DialogTitle id="alert-dialog-title">
-                    {"CAUTION"}
+                    {confirmDialogTitle}
                 </DialogTitle>
                 <DialogContent>
-                    <DialogContentText id="alert-dialog-description">
-                        Please make sure you have executed logOut operation on official bot api.
+                    <DialogContentText id="alert-dialog-description" sx={{ whiteSpace: 'pre-line' }}>
+                        {confirmDialogMessage || 'Please make sure you have executed logOut operation on official bot api.\nSelect logOut if you need to make the execution here.'}
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => handleDialogClose(false)}>Cancel</Button>
+                    {confirmDialogMessage === 'Please make sure you have executed logOut operation on official bot api.\nSelect logOut if you need to make the execution here.' && (
+                        <Button onClick={() => logOutFromOfficialAPI()}>logOut</Button>
+                    )}
                     <Button onClick={() => handleDialogClose(true)} autoFocus>
                         Confirm
                     </Button>
@@ -379,8 +495,8 @@ const ConfigQrcode: React.FC = () => {
                             <TextField
                                 name="api_address"
                                 onChange={handleChange}
-                                value={formData.api_address} label="Bot API Address(not ready to change yet, USE WITH CAUTION)"
-                                variant="outlined"/>
+                                value={formData.api_address} label="Bot API Address"
+                                variant="outlined" required/>
                         </Box>
                         <Box sx={{
                             display: "flex",
@@ -442,15 +558,28 @@ const ConfigQrcode: React.FC = () => {
                                 onChange={handleChange}
                                 color="warning"/>}
                                               label="Hide Phone Number"/>
+                            <FormControlLabel control={<Switch
+                                name="doh_switch"
+                                checked={formData.doh_switch}
+                                onChange={handleChange}
+                                color="warning"/>}
+                                              label="Using DNS over HTTPS"/>
                             <Button type="button" onClick={handleGetRecentChatID} disabled={disableGetChatId}
-                                    variant="outlined">Get recent chat
-                                ID</Button>
-                            <Button type="button" onClick={() => {
+                                    variant="outlined">Get recent chat ID
+                                    </Button>
+                            <Button type="button" onClick={async () => {
+                                if (!(await tpnWarning(true))) return;
+                                testTgApiConfig()
+                            }} disabled={disableConfigGeneration}
+                                    variant="outlined">Test your config
+                                    </Button>
+                            <Button type="button" onClick={async () => {
+                                if (!(await tpnWarning())) return;
                                 setInputOpen(true)
-                            }} disabled={disableGenerateQRCode}
+                            }} disabled={disableConfigGeneration}
                                     variant="contained">Send configuration</Button>
                             <Button type="submit" variant="contained" color="warning"
-                                    disabled={disableGenerateQRCode}>Generate QR
+                                    disabled={disableConfigGeneration}>Generate QR
                                 Code</Button>
                         </Box>
                     </form>
@@ -480,11 +609,16 @@ const ConfigQrcode: React.FC = () => {
                         from the
                         cloud.</p>
                     <h2>Important Notice</h2>
-                    <p>Since bot keys are very sensitive data, this tool will not upload any clear text configuration
-                        files to any server. You can get
+                    <ul>
+                        <li>Trusted phone number is disabled when the input bar is empty. 
+                            Enabling this function <strong>MAY CAUSES SIGNIFICANT CHARGES</strong> on your operator bill, 
+                            since it would forward any messages/notifications to designated number.</li>
+                        <li>Bot keys are YOUR SECRET, this tool <strong>WILL NOT SAVE AND UPLOAD</strong> any bot tokens and clear text configuration
+                        files to any server publicly. You can check
                         source code <Link href="https://github.com/telegram-sms/config-generate"
                                           target="_blank"
-                                          rel="noopener noreferrer">here</Link>.</p>
+                                          rel="noopener noreferrer">here</Link>.</li>
+                    </ul>
                     <h2>Acknowledgements</h2>
                     <p><Link href="https://react.dev/" target="_blank">React</Link></p>
                     <p><Link href="https://mui.com/" target="_blank">Material-UI</Link></p>
