@@ -318,7 +318,7 @@ const ConfigQrcode: React.FC = () => {
         try{
             const payload = {
             chat_id: formData.chat_id,
-            text: `[System Information]\nConnected to the Telegram Server.`
+            text: `[System Information]\nConnected to the Telegram Server.\nYour Telegram Bot API online config is valid, check the info returned on webpage.`
             };
             const response = await fetch('https://' + formData.api_address + '/bot' + formData.bot_token + '/sendMessage',{
                 method: 'POST',
@@ -417,9 +417,10 @@ const ConfigQrcode: React.FC = () => {
                 </DialogContent>
                 <DialogActions>
                     <Button onClick={() => handleDialogClose(false)}>Cancel</Button>
-                    {confirmDialogMessage === 'Please make sure you have executed logOut operation on official bot api.\nSelect logOut if you need to make the execution here.' && (
+                    {/* {confirmDialogMessage === 'Please make sure you have executed logOut operation on official bot api.\nSelect logOut if you need to make the execution here.' && (
                         <Button onClick={() => logOutFromOfficialAPI()}>logOut</Button>
-                    )}
+                    )} */}
+                    <Button onClick={() => logOutFromOfficialAPI()}>logOut</Button>
                     <Button onClick={() => handleDialogClose(true)} autoFocus>
                         Confirm
                     </Button>

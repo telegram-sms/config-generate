@@ -206,32 +206,29 @@ function Gotify() {
                 <Typography variant="h4" gutterBottom>
                     Comment Parameters
                 </Typography>
-                <Typography variant="body1" gutterBottom>
+                {/* <Typography variant="body1" gutterBottom> */}
                     You can use the following keywords within the request URL or body. The system will automatically
                     replace these keywords with their corresponding values based on the template you provide:
-                </Typography>
-                <Typography variant="body1" gutterBottom>
-                    <ul>
-                        <li><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</li>
-                        <li><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</li>
-                        <li><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
-                            message. </li>
-                    </ul>
+                {/* </Typography> */}
+                <Typography component="ul" variant="body1" gutterBottom>
+                        <Typography component="li"><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</Typography>
+                        <Typography component="li"><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</Typography>
+                        <Typography component="li"><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the message. </Typography>
                 </Typography>
                 <Typography variant="h4" gutterBottom>
                     <Link href="https://github.com/gotify/android?tab=readme-ov-file#message-priorities" target="_blank" rel="noopener">
                         Notification Priority
                     </Link>
                 </Typography>
-              <Typography >
-                For more information, please refer to the following descriptions (the default level is 5):
+                {/* <Typography > */}
+                    For more information, please refer to the following descriptions (the default level is 5):
+                {/* </Typography> */}
+                <Typography component="ul">
+                    <Typography component="li">0: No notification is displayed.</Typography>
+                    <Typography component="li">1-3: An icon is displayed in the notification bar.</Typography>
+                    <Typography component="li">4-7: An icon is displayed in the notification bar, accompanied by a sound.</Typography>
+                    <Typography component="li">8-10: An icon is displayed in the notification bar, accompanied by both sound and vibration.</Typography>
                 </Typography>
-                <ul>
-                    <li>0: No notification is displayed.</li>
-                    <li>1-3: An icon is displayed in the notification bar.</li>
-                    <li>4-7: An icon is displayed in the notification bar, accompanied by a sound.</li>
-                    <li>8-10: An icon is displayed in the notification bar, accompanied by both sound and vibration.</li>
-                </ul>
             </Box>
         </>
     );

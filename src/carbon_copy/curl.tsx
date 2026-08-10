@@ -155,13 +155,11 @@ function Curl() {
                     You can use the following keywords within the request URL or body. The system will automatically
                     replace these keywords with their corresponding values based on the template you provide:
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                    <ul>
-                        <li><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</li>
-                        <li><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</li>
-                        <li><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
-                            message. </li>
-                    </ul>
+                <Typography component="ul" variant="body1" gutterBottom>
+                        <Typography component="li"><CodeKeyword>{`{{Title}}`}</CodeKeyword>: Represents the title of the message.</Typography>
+                        <Typography component="li"><CodeKeyword>{`{{Message}}`}</CodeKeyword>: Represents the content of the message.</Typography>
+                        <Typography component="li"><CodeKeyword>{`{{Code}}`}</CodeKeyword>: Represents the verification code associated with the
+                            message. </Typography>
                 </Typography>
             </Box>
         </>

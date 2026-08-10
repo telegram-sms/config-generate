@@ -315,11 +315,9 @@ function Ntfy() {
                 <Typography variant="h4" gutterBottom>
                     Note
                 </Typography>
-                <Typography variant="body1" gutterBottom>
-                    <ul>
-                        <li><CodeKeyword>{`Token`}</CodeKeyword> is <strong>NOT REQUIRED</strong> unless the topic is protected.</li>
-                        {/* <li><CodeKeyword>{`Basic Auth String`}(username:password)</CodeKeyword> is <strong>NOT REQUIRED</strong> and <strong>STRONGLY DISCOURAGED</strong>. USE TOKEN IF POSSIBLE.</li> */}
-                    </ul>
+                <Typography component="ul" variant="body1" gutterBottom>
+                   <Typography component="li" ><CodeKeyword>{`Token`}</CodeKeyword> is <strong>NOT REQUIRED</strong> unless the topic is protected.</Typography>
+                        {/* <Typography component="li"><CodeKeyword>{`Basic Auth String`}(username:password)</CodeKeyword> is <strong>NOT REQUIRED</strong> and <strong>STRONGLY DISCOURAGED</strong>. USE TOKEN IF POSSIBLE.</Typography> */}
                 </Typography>
                 <Typography variant="h4" gutterBottom>
                     <Link href="https://docs.ntfy.sh/publish/#message-priority" target="_blank" rel="noopener">
@@ -329,13 +327,13 @@ function Ntfy() {
               <Typography >
                 For more information, please refer to the following descriptions (the default level is 5):
                 </Typography>
-                <ul>
-                    <li>1: <strong>Min priority.</strong> No vibration or sound. The notification will be under the fold in "Other notifications".</li>
-                    <li>2: <strong>Low priority.</strong> No vibration or sound. Notification will not visibly show up until notification drawer is pulled down.</li>
-                    <li>3: <strong>Default priority.</strong> Short default vibration and sound. Default notification behavior.</li>
-                    <li>4: <strong>High priority.</strong> Long vibration burst, default notification sound with a pop-over notification.</li>
-                    <li>5: <strong>Max priority.</strong> Really long vibration bursts, default notification sound with a pop-over notification.</li>
-                </ul>
+                <Typography component="ul">
+                    <Typography component="li">1: <strong>Min priority.</strong> No vibration or sound. The notification will be under the fold in "Other notifications".</Typography>
+                    <Typography component="li">2: <strong>Low priority.</strong> No vibration or sound. Notification will not visibly show up until notification drawer is pulled down.</Typography>
+                    <Typography component="li">3: <strong>Default priority.</strong> Short default vibration and sound. Default notification behavior.</Typography>
+                    <Typography component="li">4: <strong>High priority.</strong> Long vibration burst, default notification sound with a pop-over notification.</Typography>
+                    <Typography component="li">5: <strong>Max priority.</strong> Really long vibration bursts, default notification sound with a pop-over notification.</Typography>
+                </Typography>
             </Box>
         </>
     );

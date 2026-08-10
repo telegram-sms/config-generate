@@ -169,11 +169,11 @@ function Bark() {
                     <FormControlLabel control={<Switch name="time_sensitive"
                                                        checked={useTimeSensitive}
                                                        onChange={() => {
-                                                           useTimeSensitive ? setTimeSensitive(false) : setTimeSensitive(true);
+                                                            useTimeSensitive ? setTimeSensitive(false) : setTimeSensitive(true);
                                                        }}
                                                        color="warning"/>}
                                       label="Time Sensitive"/>
-                    <FormControlLabel control={<Switch name="fallback_sms"
+                    <FormControlLabel control={<Switch name="use_ringtone"
                                                        checked={useRingtone}
                                                        onChange={() => {
                                                            useRingtone ? setUseRingtone(false) : setUseRingtone(true);
@@ -183,30 +183,43 @@ function Bark() {
                     <Autocomplete
                         style={{display: useRingtone ? 'block' : 'none'}}
                         freeSolo
+                        selectOnFocus
+                        clearOnBlur
+                        handleHomeEndKeys
                         options={barkSounds}
                         value={ringtone}
                         onChange={(event, newValue) => {
+                            console.log("Webhook URL: " + newValue ? newValue : "alarm".trim())
                             setRingtone(newValue ? newValue : "alarm")
                         }}
                         renderInput={(params) => <TextField {...params} label="Sounds"/>}
                     />
                     <FormControlLabel control={<Switch name="use_group"
                                                        checked={useGroup}
-                                                       onChange={() => {
+                                                       onChange={(event) => {
                                                            useGroup ? setUseGroup(false) : setUseGroup(true);
                                                        }}
                                                        color="warning"/>}
                                       label="Using Group"/>
-                    <Autocomplete
+                    {/* <Autocomplete
                         style={{display: useGroup ? 'block' : 'none'}}
                         freeSolo
                         options={barkGroups}
                         value={group}
                         onChange={(event, newValue) => {
+                            console.debug("Group: " + newValue)
                             setGroup(newValue ? newValue : "{{Title}}")
                         }}
                         renderInput={(params) => <TextField {...params} label="Group"/>}
-                    />
+                    /> */}
+                        <TextField type="text"
+                                value={group} onChange={(event) => {
+                            console.log("Group: " + event.target.value)
+                            setGroup(event.target.value);
+                        }} label="Group"
+                                error={errorMessage !== ''}
+                                helperText={errorMessage}
+                                variant="outlined" required/>
                 </Box>
                 <Button type="button" onClick={() => {
                     setInputOpen(true)
